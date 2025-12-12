@@ -1,0 +1,2846 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>HANS GODMODE-METODE FOR ØVING – STRUKTURELLE VILKÅR PENSUM</title>
+  <style>
+    :root {
+      --bg: #020617;
+      --card-bg: #020617;
+      --accent: #38bdf8;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --correct: #22c55e;
+      --incorrect: #ef4444;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #0f172a 0, transparent 55%),
+        radial-gradient(circle at bottom right, #022c22 0, transparent 55%),
+        var(--bg);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 950px;
+    }
+
+    .shell {
+      border-radius: 26px;
+      padding: 18px 20px 20px;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.88));
+      box-shadow:
+        0 18px 55px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(148, 163, 184, 0.25);
+      backdrop-filter: blur(16px);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .title span.logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #facc15 0, #e11d48 35%, #4f46e5 70%, #22d3ee 100%);
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.8);
+      font-size: 0.7rem;
+      color: #020617;
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      font-size: 0.72rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
+    }
+
+    .progress-wrap {
+      margin-bottom: 14px;
+    }
+
+    .progress-outer {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      overflow: hidden;
+    }
+
+    .progress-inner {
+      height: 100%;
+      width: 0;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22d3ee, #4ade80, #a855f7);
+      transition: width 0.2s ease;
+    }
+
+    .progress-meta {
+      margin-top: 4px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .card {
+      border-radius: 20px;
+      padding: 18px 16px 16px;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.14), transparent 60%),
+                  var(--card-bg);
+      box-shadow:
+        0 18px 45px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(148, 163, 184, 0.3);
+      margin-bottom: 14px;
+    }
+
+    .q-topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .q-topic {
+      color: var(--accent);
+      opacity: 0.9;
+    }
+
+    .q-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .q-text {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .option-btn {
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: rgba(15, 23, 42, 0.96);
+      padding: 8px 10px;
+      font-size: 0.92rem;
+      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.08s ease, box-shadow 0.08s ease;
+    }
+
+    .option-btn span.txt {
+      flex: 1;
+      text-align: left;
+      padding-right: 6px;
+    }
+
+    .option-prefix {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-right: 8px;
+      min-width: 18px;
+    }
+
+    .option-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+      border-color: rgba(96, 165, 250, 0.6);
+    }
+
+    .option-btn.correct {
+      border-color: rgba(34, 197, 94, 0.9);
+      background: rgba(22, 163, 74, 0.15);
+    }
+
+    .option-btn.incorrect {
+      border-color: rgba(239, 68, 68, 0.9);
+      background: rgba(220, 38, 38, 0.15);
+    }
+
+    .option-btn.exam-selected {
+      border-color: rgba(59, 130, 246, 0.9);
+      background: rgba(37, 99, 235, 0.12);
+    }
+
+    .option-status {
+      font-size: 0.75rem;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+
+    .option-status.good {
+      border-color: rgba(34, 197, 94, 0.8);
+      color: #bbf7d0;
+    }
+
+    .option-status.bad {
+      border-color: rgba(239, 68, 68, 0.85);
+      color: #fecaca;
+    }
+
+    .feedback-row {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      min-height: 1.1em;
+    }
+
+    .feedback-row span.correct {
+      color: var(--correct);
+      font-weight: 500;
+    }
+
+    .feedback-row span.incorrect {
+      color: var(--incorrect);
+      font-weight: 500;
+    }
+
+    .explanation {
+      margin-top: 4px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .deep-dive {
+      margin-top: 10px;
+      padding: 8px 9px;
+      border-radius: 14px;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(148,163,184,0.45);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .deep-dive-title {
+      font-size: 0.86rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: var(--accent);
+    }
+
+    .deep-dive-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+
+    .deep-dive-close {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .deep-dive-close:hover {
+      color: var(--text-main);
+    }
+
+    .deep-dive-body {
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+
+    .exam-summary {
+      margin-top: 10px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      background: rgba(15,23,42,0.96);
+      border: 1px solid rgba(148,163,184,0.45);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .exam-summary h3 {
+      margin: 0 0 6px;
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .exam-miss {
+      margin-bottom: 6px;
+      border-bottom: 1px dashed rgba(55,65,81,0.7);
+      padding-bottom: 4px;
+    }
+
+    .exam-miss:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .controls-left,
+    .controls-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      font-size: 0.86rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(37, 99, 235, 0.96);
+      color: #e5e7eb;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.6);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      white-space: nowrap;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(37, 99, 235, 0.75);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.9);
+    }
+
+    button.secondary {
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-muted);
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.65);
+    }
+
+    button.danger {
+      background: rgba(220, 38, 38, 0.95);
+      box-shadow: 0 6px 18px rgba(220, 38, 38, 0.6);
+    }
+
+    .stat-pill {
+      font-size: 0.74rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+    }
+
+    .stat-pill span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .tier-pill {
+      font-size: 0.74rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(52, 211, 153, 0.7);
+      color: #a7f3d0;
+      background: rgba(6, 95, 70, 0.5);
+    }
+
+    .exam-banner {
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px dashed rgba(148, 163, 184, 0.7);
+      color: var(--text-muted);
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .exam-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #fbbf24;
+    }
+
+    @media (max-width: 640px) {
+      .shell { padding: 14px 12px 14px; border-radius: 20px; }
+      .q-text { font-size: 1rem; }
+      .option-btn { font-size: 0.9rem; }
+    }
+  </style>
+
+<style>
+  body {
+    background-image: url("788448.jpg");
+    background-size: cover;
+    background-position: 95% center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: -1;
+  }
+
+  .card, .modal, .deep-dive, .quiz-container, .container {
+    background: rgba(20, 20, 20, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+</style>
+
+
+<style>
+.title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quiz-icon-round {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.6);
+  box-shadow:
+    0 0 12px rgba(0,0,0,0.6),
+    0 0 8px rgba(255,255,255,0.2);
+}
+</style>
+
+
+<style>
+body {
+  background-image: url("788448.jpg");
+  background-size: cover;
+  background-position: 95% center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: -1;
+}
+</style>
+
+
+<style>
+/* === iPhone optimalisering === */
+@supports (-webkit-touch-callout: none) {
+
+  body {
+    background-attachment: scroll;
+  }
+
+  .shell {
+    max-height: 100svh;
+    overflow-y: auto;
+  }
+
+  .option-btn {
+    min-height: 44px;
+  }
+}
+
+/* === iPhone LANDSCAPE – SPLIT LAYOUT === */
+@supports (-webkit-touch-callout: none) {
+  @media screen and (orientation: landscape) and (max-height: 500px) {
+
+    .subtitle,
+    .chip-row,
+    .exam-banner {
+      display: none;
+    }
+
+    .shell {
+      display: flex;
+      flex-direction: column;
+      height: 100svh;
+    }
+
+    .card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 10px;
+    }
+
+    .q-text {
+      flex-shrink: 0;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .options {
+      flex: 1;
+      overflow-y: auto;
+      gap: 6px;
+    }
+
+    .option-btn {
+      min-height: 42px;
+      font-size: 0.85rem;
+      padding: 6px 8px;
+    }
+
+    .feedback-row,
+    .deep-dive,
+    .exam-summary {
+      display: none;
+    }
+
+    .bottom-bar {
+      margin-top: 6px;
+    }
+  }
+}
+</style>
+
+</head>
+<body>
+<div class="app">
+  <div class="shell">
+    <div class="top-bar">
+      <div class="title-wrap">
+        <div class="title">
+          <img src="rage_icon.jpg" class="quiz-icon-round" alt="Quiz icon">
+          <span>HANS GODMODE-METODE FOR ØVING – STRUKTURELLE VILKÅR PENSUM</span>
+        </div>
+        <div class="subtitle">
+          Alt pensum blandet: velferd, folketrygd, NAV, brukermedvirkning, etikk, styring og trygderett.
+        </div>
+        <div class="chip-row">
+          <div class="chip">
+            <span class="chip-dot"></span>
+            <span>1 riktig svar per spørsmål</span>
+          </div>
+          <div class="chip">
+            <span>Alt trekkes tilfeldig</span>
+          </div>
+          <div class="chip">
+            <span>Bruk piltaster ← →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-outer">
+        <div class="progress-inner" id="progressInner"></div>
+      </div>
+      <div class="progress-meta">
+        <span id="progressText"></span>
+        <span id="scoreText"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="q-topline">
+        <span class="q-topic" id="topicTag"></span>
+        <div class="q-meta">
+          <span id="dayTag"></span>
+          <span id="tierTag" class="tier-pill"></span>
+          <span id="counterTag"></span>
+        </div>
+      </div>
+      <div class="q-text" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback-row" id="feedback"></div>
+      <div class="deep-dive" id="deepDive" style="display:none;"></div>
+      <div class="exam-summary" id="examSummary" style="display:none;"></div>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="controls-left">
+        <button id="prevBtn">← Forrige</button>
+        <button id="nextBtn">Neste →</button>
+        <button class="secondary" id="randomBtn">Tilfeldig</button>
+      </div>
+      <div class="controls-right">
+        <div class="stat-pill">
+          <span class="dot"></span>
+          <span id="answeredText"></span>
+        </div>
+        <div class="stat-pill">
+          <span class="dot"></span>
+          <span id="tierStatusText"></span>
+        </div>
+        <button class="secondary" id="examBtn">Start eksamensmodus (25 spørsmål)</button>
+      </div>
+    </div>
+
+    <div class="exam-banner" id="examBanner">
+      <span class="exam-dot"></span>
+      <span id="examBannerText">
+        Øvingsmodus: fasit med en gang, progresjon mellom nivåer. Klikk på eksamensknappen for prøve uten fasit underveis.
+      </span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== Spørsmål fra dag-quizene =====
+
+// Dag 1–2
+const questionsDag1_2 = [
+    // BEGREPER DAG 1
+    {
+      topic: "Begreper",
+      question: "Hva menes med sosial ulikhet?",
+      options: [
+        "Bare forskjeller i personlighet",
+        "Forskjeller i ressurser, levekår og livssjanser mellom grupper",
+        "Kun forskjeller i politiske meninger",
+        "Bare ulikheter i kultur og språk"
+      ],
+      correctIndex: 1,
+      explanation: "Sosial ulikhet handler om hvordan økonomi, utdanning, helse og makt fordeles ulikt – og gir ulike muligheter i livet."
+    },
+    {
+      topic: "Begreper",
+      question: "Hva kjennetegner et risikosamfunn?",
+      options: [
+        "At risiko bare er lokal og forutsigbar",
+        "At risiko hovedsakelig handler om naturkatastrofer",
+        "At moderne, menneskeskapte risikoer blir globale og komplekse",
+        "At staten tar alt ansvar for risiko"
+      ],
+      correctIndex: 2,
+      explanation: "Risikosamfunn beskriver hvordan moderne teknologi, økonomi og arbeidsliv skaper nye, globale og uforutsigbare risikoer – med mer ansvar lagt på individet."
+    },
+    {
+      topic: "Begreper",
+      question: "Hva betyr modernisering i sosiologisk forstand?",
+      options: [
+        "At alle får ny mobiltelefon",
+        "Samfunnsendringer knyttet til industrialisering, teknologi og byråkratisering",
+        "At tradisjoner blir sterkere",
+        "At politikk slutter å påvirke samfunnet"
+      ],
+      correctIndex: 1,
+      explanation: "Modernisering handler om overgangen til et mer komplekst, industrialisert og teknologisk samfunn med nye roller og svakere felles normer."
+    },
+    {
+      topic: "Begreper",
+      question: "Hva beskriver begrepet sosial mobilitet?",
+      options: [
+        "At folk flytter fysisk mellom byer",
+        "Muligheten til å bevege seg opp eller ned i samfunnets klasser og lag",
+        "At du bytter jobb ofte",
+        "At du reiser mye i jobben"
+      ],
+      correctIndex: 1,
+      explanation: "Sosial mobilitet handler om hvordan mennesker kan endre sin sosiale posisjon, ofte gjennom utdanning, arbeid og økonomi."
+    },
+    {
+      topic: "Begreper",
+      question: "Hva er institusjoner i sosiologisk betydning?",
+      options: [
+        "Bare bygninger som skoler og sykehus",
+        "Uformelle vennskap",
+        "Stabile systemer og regler som organiserer samfunnet",
+        "Kun politiske partier"
+      ],
+      correctIndex: 2,
+      explanation: "Institusjoner er ordninger og regler (som familie, skole, NAV) som gir forutsigbarhet og styrer hvordan vi handler."
+    },
+    {
+      topic: "Begreper",
+      question: "Hva menes med individualisering?",
+      options: [
+        "At alle blir mer like",
+        "At staten tar mer ansvar for individet",
+        "Flere valg, mer personlig ansvar og løsere sosiale bånd",
+        "At tradisjonelle normer blir sterkere"
+      ],
+      correctIndex: 2,
+      explanation: "Individualisering betyr at folk i større grad må skape sin egen identitet og livsløp, med mindre faste fellesskap rundt seg."
+    },
+
+    // VELFERDSMODELLER
+    {
+      topic: "Velferdsmodeller",
+      question: "Hva er typisk for den nordiske velferdsmodellen?",
+      options: [
+        "Lav skatt og minimal stat",
+        "Familien har hovedansvaret for velferd",
+        "Universelle rettigheter, høy skatt og sterk statlig omfordeling",
+        "Kun private forsikringer"
+      ],
+      correctIndex: 2,
+      explanation: "Den nordiske modellen bygger på at staten har hovedansvaret, med universelle ordninger, høy omfordeling og mål om likhet."
+    },
+    {
+      topic: "Velferdsmodeller",
+      question: "Hvilke land nevnes som eksempler på den nordiske modellen?",
+      options: [
+        "Tyskland og Østerrike",
+        "USA og Storbritannia",
+        "Norge, Sverige og Danmark",
+        "Spania og Italia"
+      ],
+      correctIndex: 2,
+      explanation: "Klassiske eksempler i pensum er Norge, Sverige og Danmark – høye skatter, universelle ordninger og sterk velferdsstat."
+    },
+    {
+      topic: "Velferdsmodeller",
+      question: "Hva kjennetegner den konservative (korporative) velferdsmodellen?",
+      options: [
+        "Markedet har hovedansvaret, staten gir kun minimum",
+        "Universelle rettigheter uavhengig av yrkesstatus",
+        "Familie og arbeidsliv bærer mye av ansvaret, ytelser knyttet til yrkesstatus",
+        "Bare frivillige ordninger"
+      ],
+      correctIndex: 2,
+      explanation: "I den konservative modellen er familien og arbeidsmarkedet viktig, og ytelser er ofte avledet av stilling og inntekt – mindre universell omfordeling."
+    },
+    {
+      topic: "Velferdsmodeller",
+      question: "Hvilke land brukes ofte som eksempler på den konservative modellen?",
+      options: [
+        "Tyskland og Østerrike",
+        "USA og Storbritannia",
+        "Norge og Sverige",
+        "Danmark og Nederland"
+      ],
+      correctIndex: 0,
+      explanation: "Typiske eksempler er Tyskland og Østerrike, med sterke ordninger knyttet til yrke og familie."
+    },
+    {
+      topic: "Velferdsmodeller",
+      question: "Hva er kjernen i den liberale velferdsmodellen?",
+      options: [
+        "Høy skatt og universelle velferdsordninger",
+        "Lav skatt, markedsløsninger og behovsprøvd minimumsstøtte",
+        "Familien har alt ansvar for omsorg",
+        "Kun statlige tjenester uten privat sektor"
+      ],
+      correctIndex: 1,
+      explanation: "I den liberale modellen forventes individet å ordne seg selv via markedet. Staten gir kun et minimum, ofte behovsprøvd."
+    },
+    {
+      topic: "Velferdsmodeller",
+      question: "Hvilke land nevnes som eksempler på den liberale modellen?",
+      options: [
+        "USA og Storbritannia",
+        "Norge og Danmark",
+        "Tyskland og Østerrike",
+        "Sverige og Finland"
+      ],
+      correctIndex: 0,
+      explanation: "USA og Storbritannia trekkes ofte frem som liberale: stor rolle for markedet, lavere skattenivå og mer behovsprøvd støtte."
+    },
+
+    // LØDEMEL
+    {
+      topic: "Lødemel",
+      question: "Hva er hovedforskjellen mellom sosialpolitikk og sosialt arbeid hos Lødemel?",
+      options: [
+        "Sosialpolitikk handler bare om individet, sosialt arbeid om systemer",
+        "Sosialpolitikk handler om strukturer og ordninger, sosialt arbeid om mennesker og hverdagsproblemer",
+        "Begge handler kun om terapi",
+        "De er egentlig det samme faget"
+      ],
+      correctIndex: 1,
+      explanation: "Lødemel: Sosialpolitikk = system og rettigheter. Sosialt arbeid = praksis med individer og familier inne i dette systemet."
+    },
+    {
+      topic: "Lødemel",
+      question: "Hvorfor mener Lødemel at sosialpolitikk er viktig for sosialarbeidere?",
+      options: [
+        "For å kunne skrive lange rapporter",
+        "For å forstå medienes rolle",
+        "For å forstå strukturene de jobber i, ellers får de ikke hjulpet brukerne godt nok",
+        "For å kunne unngå lovverk"
+      ],
+      correctIndex: 2,
+      explanation: "Uten forståelse av lovverk, økonomi og organisering blir sosialarbeideren dårligere i stand til å navigere systemet for brukeren."
+    },
+    {
+      topic: "Lødemel",
+      question: "Hva illustrerer historien om “verdige” og “uverdige” fattige?",
+      options: [
+        "At alle fikk lik hjelp",
+        "At moral og kontroll har vært sentralt i velferdsarbeid",
+        "At bare strukturer teller",
+        "At sosialt arbeid alltid har vært ikke-dømmende"
+      ],
+      correctIndex: 1,
+      explanation: "Historisk ble det sortert mellom hvem som fortjente hjelp og ikke – en moraliserende logikk som fortsatt lever i moderniserte varianter."
+    },
+    {
+      topic: "Lødemel",
+      question: "Hva menes med at sosialpolitikk og sosialt arbeid er som “tvillinger” hos Lødemel?",
+      options: [
+        "At de er helt identiske",
+        "At de er nært knyttet, men ofte uenige og med ulikt fokus",
+        "At de aldri påvirker hverandre",
+        "At kun sosialpolitikk er viktig"
+      ],
+      correctIndex: 1,
+      explanation: "De vokser fram sammen og påvirker hverandre, men ser på problemene fra ulike vinkler: individ vs struktur."
+    },
+
+    // KJØRSTAD
+    {
+      topic: "Kjørstad",
+      question: "Hva mener Kjørstad når hun sier at NAV er både hjelper og portvokter?",
+      options: [
+        "NAV jobber bare med kontroll",
+        "NAV jobber bare med hjelp",
+        "NAV skal både støtte brukeren og samtidig forvalte og begrense ressurser",
+        "NAV har ingen etiske dilemmaer"
+      ],
+      correctIndex: 2,
+      explanation: "NAV skal hjelpe brukeren, men også sikre at offentlige midler brukes “riktig” – dette skaper et konstant etisk krysspress."
+    },
+    {
+      topic: "Kjørstad",
+      question: "Hva kjennetegner arbeidslinja slik Kjørstad beskriver den?",
+      options: [
+        "Ytelser uten krav",
+        "Ingen forventning om aktivitet",
+        "Prinsippet om at man skal yte for å nyte – aktivitet som vilkår",
+        "Full lønn uten aktivitet"
+      ],
+      correctIndex: 2,
+      explanation: "Arbeidslinja bygger på gjensidighet: du skal gjøre din plikt (aktivitet) for å ha krav på rettigheter."
+    },
+    {
+      topic: "Kjørstad",
+      question: "Hvorfor er arbeidslinja spesielt problematisk for noen brukergrupper?",
+      options: [
+        "Fordi den gir for lite kontroll",
+        "Fordi krav om aktivitet kan bli uforsvarlige for dem med tunge og sammensatte problemer",
+        "Fordi ingen vil ha arbeid",
+        "Fordi det ikke finnes regler"
+      ],
+      correctIndex: 1,
+      explanation: "For personer med rus, psykiske lidelser eller dårlig helse kan aktivitetskrav bli urealistiske og gjøre situasjonen verre."
+    },
+    {
+      topic: "Kjørstad",
+      question: "Hva betyr det at sosialarbeideren er en “bakkebyråkrat” (Lipsky)?",
+      options: [
+        "At de kun følger regler uten skjønn",
+        "At de jobber i bakkenæringen",
+        "At de oversetter politikk til praksis i møtet med brukeren",
+        "At de ikke påvirker politikk"
+      ],
+      correctIndex: 2,
+      explanation: "Bakkebyråkrater tar konkrete beslutninger og utøver skjønn – slik blir politikken faktisk til i praksis."
+    },
+
+    // BERG – SIKKERHETSNETT
+    {
+      topic: "Berg",
+      question: "Hva er velferdsstatens sikkerhetsnett ifølge Berg?",
+      options: [
+        "Bare økonomisk sosialhjelp",
+        "Bare folketrygden",
+        "Summen av arbeidslinja, tjenester og ytelser som skal gi trygghet",
+        "Kun ideelle organisasjoner"
+      ],
+      correctIndex: 2,
+      explanation: "Sikkerhetsnettet består av arbeid, tjenester (NAV, helse, bolig) og ytelser (trygd, sosialhjelp) som sammen skal hindre at folk faller helt utenfor."
+    },
+    {
+      topic: "Berg",
+      question: "Hva er en viktig grunn til at noen faller gjennom sikkerhetsnettet?",
+      options: [
+        "At det finnes for få lover",
+        "At systemet er komplekst og samarbeid svikter",
+        "At det er for mye tid til brukerne",
+        "At det ikke finnes kontroll"
+      ],
+      correctIndex: 1,
+      explanation: "Kompleksitet, siloer mellom tjenester og uklare ansvar gjør at brukere må navigere et vanskelig system selv."
+    },
+    {
+      topic: "Berg",
+      question: "Hvordan kan arbeidslinja være både en vei og en felle?",
+      options: [
+        "Den har ingen positive sider",
+        "Den har ingen negative sider",
+        "Arbeid gir deltakelse, men strenge krav og innstramminger kan ekskludere dem som ikke kan jobbe",
+        "Den gjelder bare for unge"
+      ],
+      correctIndex: 2,
+      explanation: "Arbeid kan være løsning for mange, men når stønad blir sterkt betinget av aktivitet, rammer det hardt de som ikke klarer det."
+    },
+
+    // MARGINALISERING / SYSTEMSVIKT
+    {
+      topic: "Marginalisering",
+      question: "Hva er marginalisering?",
+      options: [
+        "At alle inkluderes i arbeidslivet",
+        "En prosess der mennesker gradvis skyves ut av fellesskapet",
+        "Kun midlertidig arbeidsledighet",
+        "Bare et individproblem"
+      ],
+      correctIndex: 1,
+      explanation: "Marginalisering handler om å miste tilknytning til arbeid, nettverk og ordninger – og få mindre innflytelse på eget liv."
+    },
+    {
+      topic: "Marginalisering",
+      question: "Hva menes med systemsvikt i velferdsstaten?",
+      options: [
+        "At enkeltpersoner tar dårlige valg",
+        "At ordningene fungerer perfekt",
+        "At sikkerhetsnettet ikke virker som intensjonen, og folk faller mellom ordninger",
+        "At det er for mange tjenester"
+      ],
+      correctIndex: 2,
+      explanation: "Systemsvikt oppstår når regler, organisering og samarbeid gjør at de mest sårbare ikke får hjelpen de egentlig skulle hatt."
+    }
+  ];
+
+// Dag 3–4
+const questionsDag3_4 = [
+    {
+      topic: "Folketrygden",
+      question: "Hva er folketrygden i Norge?",
+      options: [
+        "Et frivillig privat pensjonsfond",
+        "Det nasjonale systemet som sikrer inntekt når folk ikke kan jobbe",
+        "En ordning bare for personer over 67 år",
+        "En kommunal støtteordning for sosialhjelp"
+      ],
+      correctIndex: 1,
+      explanation: "Folketrygden er det nasjonale sikkerhetsnettet som skal gi inntektssikring ved sykdom, uførhet, arbeidsledighet, alderdom osv. – et grunnleggende velferdssystem, ikke en frivillig ordning."
+    },
+    {
+      topic: "Folketrygden",
+      question: "Hvilke to hovedprinsipper er folketrygden bygd på?",
+      options: [
+        "Marked og konkurranse",
+        "Solidaritet og lik lønn",
+        "Grunntrygghet og arbeid/opptjening",
+        "Frivillighet og veldedighet"
+      ],
+      correctIndex: 2,
+      explanation: "Grunntrygghet betyr et minimumsnivå for alle medlemmer. Arbeid/opptjening betyr at mye avhenger av hvor mye du har tjent og jobbet tidligere."
+    },
+    {
+      topic: "Folketrygden",
+      question: "Hva betyr grunntrygghet i folketrygden?",
+      options: [
+        "At bare de som har jobbet lenge får ytelser",
+        "At alle medlemmer har rett til et minimum av økonomisk sikkerhet",
+        "At kommunen må dekke alle utgifter",
+        "At NAV kan gi lån ved behov"
+      ],
+      correctIndex: 1,
+      explanation: "Grunntrygghet er et universelt sikkerhetsnett som skal hindre fattigdom – også for dem som har liten eller ingen opptjening."
+    },
+    {
+      topic: "Folketrygden",
+      question: "Hva kjennetegner prinsippet om arbeid og opptjening i folketrygden?",
+      options: [
+        "Ytelser blir helt lik for alle",
+        "Ytelser avhenger av tidligere inntekt og arbeidstilknytning",
+        "Bare uføre påvirkes av opptjening",
+        "Det gjelder kun for alderspensjon"
+      ],
+      correctIndex: 1,
+      explanation: "Prinsippet er at jo sterkere tilknytning til arbeidslivet du har hatt, desto høyere blir mange av ytelsene (f.eks. sykepenger, uføretrygd, pensjon)."
+    },
+    {
+      topic: "Ytelser",
+      question: "Hva er hovedformålet med sykepenger?",
+      options: [
+        "Å sikre inntekt ved varig uførhet",
+        "Å kompensere inntekt ved midlertidig sykdom",
+        "Å gi støtte ved arbeidsledighet",
+        "Å dekke utgifter til bolig"
+      ],
+      correctIndex: 1,
+      explanation: "Sykepenger skal dekke lønnsbortfall i en periode der du forventes å bli frisk igjen og komme tilbake i jobb."
+    },
+    {
+      topic: "Ytelser",
+      question: "Hva er et sentralt vilkår for å få sykepenger?",
+      options: [
+        "At du er registrert som arbeidssøker",
+        "At du har hatt inntekt fra arbeid før du ble syk",
+        "At du er over 62 år",
+        "At du har mottatt AAP først"
+      ],
+      correctIndex: 1,
+      explanation: "Sykepenger bygger på at du faktisk mister arbeidsinntekt – derfor må du ha vært i jobb og hatt inntekt før sykdommen."
+    },
+    {
+      topic: "Ytelser",
+      question: "Når brukes arbeidsavklaringspenger (AAP)?",
+      options: [
+        "Ved kortvarig forkjølelse",
+        "Når du er midlertidig arbeidsledig uten helseproblemer",
+        "Når du har nedsatt arbeidsevne over lengre tid og trenger behandling eller avklaring",
+        "Kun like før alderspensjon"
+      ],
+      correctIndex: 2,
+      explanation: "AAP er for mer langvarig nedsatt arbeidsevne der det trengs behandling, tiltak og avklaringer før man vet om og hvordan du kan jobbe."
+    },
+    {
+      topic: "Ytelser",
+      question: "Hvorfor er AAP lavere enn sykepenger og har strengere krav?",
+      options: [
+        "For å motivere til aktivitet og avklaring av arbeidsevne",
+        "Fordi det bare gjelder unge",
+        "Fordi det er en kommunal ytelse",
+        "Fordi den skal vare livet ut"
+      ],
+      correctIndex: 0,
+      explanation: "AAP skal både sikre inntekt og presse fram aktivitet – derfor er nivået lavere enn sykepenger og kravene til aktivitet strengere."
+    },
+    {
+      topic: "Ytelser",
+      question: "Hva er formålet med uføretrygd?",
+      options: [
+        "Å dekke kortvarig inntektstap ved forkjølelse",
+        "Å gi midlertidig støtte ved omstilling",
+        "Å gi stabil inntekt når arbeidsevnen er varig tapt",
+        "Å dekke ekstra ferieutgifter"
+      ],
+      correctIndex: 2,
+      explanation: "Uføretrygd er en varig ytelse når arbeidsevnen er varig nedsatt – den erstatter inntekt livet ut, ikke bare midlertidig."
+    },
+    {
+      topic: "Ytelser",
+      question: "Hva er et viktig vilkår for å få uføretrygd?",
+      options: [
+        "At du har vært arbeidsledig mer enn ett år",
+        "At du er under 25 år",
+        "At du har dokumentert varig nedsatt arbeidsevne",
+        "At du har mottatt sosialhjelp tidligere"
+      ],
+      correctIndex: 2,
+      explanation: "Skillet mellom AAP og uføre er varighet: uføretrygd krever at arbeidsevnen er varig nedsatt, dokumentert gjennom utredning og tiltak."
+    },
+    {
+      topic: "Ytelser",
+      question: "Når har du rett til dagpenger?",
+      options: [
+        "Når du har mistet jobben og oppfyller inntektskrav og er aktiv arbeidssøker",
+        "Når du fyller 67 år",
+        "Når du er hjemmeværende student",
+        "Når du mottar uføretrygd"
+      ],
+      correctIndex: 0,
+      explanation: "Dagpenger er en arbeidsledighetsytelse – du må ha hatt tilstrekkelig inntekt tidligere og faktisk være aktiv arbeidssøker."
+    },
+    {
+      topic: "Ytelser",
+      question: "Hva er formålet med dagpenger?",
+      options: [
+        "Å kompensere inntekt ved sykdom",
+        "Å gi pensjon etter yrkeslivet",
+        "Å dekke inntektstap ved arbeidsledighet i en periode",
+        "Å dekke utgifter til helse- og omsorgstjenester"
+      ],
+      correctIndex: 2,
+      explanation: "Dagpenger skal gi midlertidig inntektssikring mens du står uten jobb og søker arbeid."
+    },
+    {
+      topic: "Ytelser",
+      question: "Hva er alderspensjon i folketrygden?",
+      options: [
+        "En midlertidig stønad ved arbeidsledighet",
+        "En kommunal ytelse for unge voksne",
+        "En behovsprøvd ytelse kun for de fattigste",
+        "Ytelsen du får etter yrkeslivet, basert på opptjening"
+      ],
+      correctIndex: 3,
+      explanation: "Alderspensjon er den inntekten du får når du trer ut av arbeidslivet, og nivået henger sammen med hva du har tjent opp gjennom livet."
+    },
+    {
+      topic: "Ytelser",
+      question: "Hvordan henger varighet og kompensasjonsnivå sammen i ytelsene?",
+      options: [
+        "Midlertidige situasjoner gir ofte høyere kompensasjonsnivå enn varige",
+        "Varige situasjoner gir alltid høyest kompensasjonsnivå",
+        "Varighet har ingen betydning",
+        "Bare alder avgjør nivået"
+      ],
+      correctIndex: 0,
+      explanation: "Typisk er sykepenger (kortvarig) høyere enn AAP og uføretrygd (mer langvarig/varig), nettopp for å stimulere til retur til arbeid."
+    },
+    {
+      topic: "Innstramminger",
+      question: "Hva menes med innstramminger i folketrygden?",
+      options: [
+        "Lavere skatter for de rikeste",
+        "Strengere vilkår, kortere perioder eller lavere nivå på ytelser",
+        "Flere feriedager for NAV-ansatte",
+        "Færre kontrollrutiner"
+      ],
+      correctIndex: 1,
+      explanation: "Innstramminger kan være at det blir vanskeligere å kvalifisere, at stønadsperioden blir kortere, eller at satsene senkes."
+    },
+    {
+      topic: "Innstramminger",
+      question: "Hva kan være en konsekvens av innstramminger for utsatte grupper?",
+      options: [
+        "At de lettere kommer i jobb",
+        "At færre trenger sosialhjelp",
+        "At flere faller ut av trygdesystemet og ender på lav sosialhjelp",
+        "At inntektene deres øker"
+      ],
+      correctIndex: 2,
+      explanation: "Når det blir vanskeligere å få/behholde trygdeytelser, kan mange ende på økonomisk sosialhjelp – som er lavere, behovsprøvd og mer usikkert."
+    },
+    {
+      topic: "Innstramminger",
+      question: "Hvordan kan innstramminger påvirke helse og tilknytning til arbeid?",
+      options: [
+        "De gir alltid bedre helse",
+        "De gjør det lettere å komme i jobb for alle",
+        "De kan skape økonomisk stress, dårligere helse og større avstand til arbeidslivet",
+        "De påvirker ikke helse eller arbeidstilknytning"
+      ],
+      correctIndex: 2,
+      explanation: "Lav inntekt og utrygghet kan gi stress, psykiske plager og dårligere helse, som igjen gjør det vanskeligere å komme i eller stå i jobb."
+    },
+    {
+      topic: "Kommunen",
+      question: "Hva betyr det at kommunen har et sørge-for-ansvar etter HOL § 3-1?",
+      options: [
+        "At staten må levere alle tjenestene",
+        "At frivillige organisasjoner har hovedansvaret",
+        "At kommunen må sikre nødvendige helse- og omsorgstjenester til innbyggerne",
+        "At bare spesialisthelsetjenesten har ansvar"
+      ],
+      correctIndex: 2,
+      explanation: "Kommunen kan organisere som de vil og kjøpe tjenester fra andre, men ansvaret for at innbyggerne faktisk får nødvendig hjelp ligger hos kommunen."
+    },
+    {
+      topic: "Kommunen",
+      question: "Hva handler HOL § 3-2 i hovedsak om?",
+      options: [
+        "Kommunens skatteinntekter",
+        "Listen over hvilke helse- og omsorgstjenester kommunen skal tilby",
+        "Regler for folketrygdens pensjon",
+        "Krav til privat forsikring"
+      ],
+      correctIndex: 1,
+      explanation: "§ 3-2 konkretiserer ansvaret ved å liste opp tjenestetyper: helsetjenester i hjemmet, personlig assistanse, institusjonsplass, dagtilbud osv."
+    },
+    {
+      topic: "Kommunen",
+      question: "Hva er forsvarlighetskravet i helse- og omsorgstjenesteloven?",
+      options: [
+        "At tjenestene skal være luksuriøse",
+        "At tjenestene skal være faglig forsvarlige, tilpasset behov og gis i tide",
+        "At tjenestene skal være billigst mulig",
+        "At alle får like mye tjenester uansett behov"
+      ],
+      correctIndex: 1,
+      explanation: "Forsvarlighet handler om kvalitet, riktig omfang, kompetanse og timing – hjelpen må være god nok for den enkeltes behov."
+    },
+    {
+      topic: "Kommunen",
+      question: "Hva slo Høyesterett fast i Fusa-dommen om forholdet mellom økonomi og forsvarlighet?",
+      options: [
+        "At dårlig økonomi kan brukes som grunn til å gi mindre hjelp enn forsvarlig",
+        "At kommunen selv bestemmer minstestandard uten rettslige grenser",
+        "At forsvarlighetskravet setter en minstestandard som ikke kan underkjennes av økonomi",
+        "At brukeren alltid må tilpasse seg kommunens budsjett"
+      ],
+      correctIndex: 2,
+      explanation: "Fusa-dommen slår fast at individuell rett til forsvarlige tjenester går foran kommunens budsjetthensyn – økonomi kan ikke legitimere uforsvarlig hjelp."
+    },
+    {
+      topic: "Kommunen",
+      question: "Hva innebærer retten til institusjonsplass (sykehjem)?",
+      options: [
+        "At alle over 67 år automatisk har krav på sykehjemsplass",
+        "At kommunen bare må ha et sykehjem i kommunen",
+        "At du har rett til sykehjem hvis du trenger heldøgns tjenester som ikke kan gis forsvarlig hjemme",
+        "At sykehjem kun er for personer uten pårørende"
+      ],
+      correctIndex: 2,
+      explanation: "Hvis hjemmebaserte tjenester ikke lenger gir et forsvarlig tilbud, må kommunen tilby heldøgns omsorg – ofte i sykehjem."
+    },
+    {
+      topic: "Kommunen",
+      question: "Hva er hovedformålet med BPA (brukerstyrt personlig assistanse)?",
+      options: [
+        "Å spare penger for kommunen",
+        "Å gi brukeren mer styring og selvbestemmelse over egen hverdag",
+        "Å flytte ansvar over på pårørende",
+        "Å standardisere alle tjenester"
+      ],
+      correctIndex: 1,
+      explanation: "BPA handler om brukerstyring – at den som mottar hjelp selv bestemmer hvem som hjelper, når og hvordan, for å få mer kontroll over eget liv."
+    },
+    {
+      topic: "Kommunen",
+      question: "Kan kommunen avslå BPA bare fordi det er dyrere enn kommunale tjenester?",
+      options: [
+        "Ja, økonomi er alltid avgjørende",
+        "Nei, ikke hvis lovens vilkår for rett til BPA er oppfylt",
+        "Bare hvis brukeren er under 18 år",
+        "Bare hvis NAV sier det"
+      ],
+      correctIndex: 1,
+      explanation: "Kostnad alene er ikke nok grunn til å avslå BPA. Hvis vilkårene er oppfylt, har brukeren rett til BPA selv om det blir dyrere for kommunen."
+    }
+  ];
+
+// Dag 5–6
+const questionsDag5_6 = [
+    // BRUKERMEDVIRKNING
+    {
+      topic: "Brukermedvirkning",
+      question: "Hva er hovedideen i brukermedvirkning?",
+      options: [
+        "At brukeren får informasjon om vedtak",
+        "At brukeren får velge hvilken ansatt de liker",
+        "At personen som mottar tjenester faktisk får påvirke beslutninger som angår dem",
+        "At brukeren må godta alle beslutninger uten innspill"
+      ],
+      correctIndex: 2,
+      explanation: "Brukermedvirkning handler om maktfordeling: brukeren skal ikke bare bli informert, men ha reell innflytelse på beslutningene."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hva kjennetegner brukermedvirkning på individnivå?",
+      options: [
+        "At brukerorganisasjoner deltar i politiske høringer",
+        "At tjenestene evalueres på systemnivå",
+        "At den enkelte bruker høres og involveres i valg om egen tjeneste",
+        "At statsbudsjettet påvirkes av brukerinnspill"
+      ],
+      correctIndex: 2,
+      explanation: "Individnivå = NAV-samtaler, helsehjelp, IP osv., der den enkelte brukeren deltar i beslutninger om eget liv."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hva er et eksempel på brukermedvirkning på systemnivå?",
+      options: [
+        "En samtale mellom NAV-veileder og én bruker",
+        "Brukerorganisasjoner som sitter i råd, utvalg og høringer",
+        "En individuell plan (IP) for en person",
+        "At en ansatt gir informasjon om et vedtak"
+      ],
+      correctIndex: 1,
+      explanation: "Systemnivå handler om at brukere organiserer seg og påvirker hvordan tjenester utformes politisk og administrativt."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hva er reell brukermedvirkning?",
+      options: [
+        "At brukeren får si noe, men utfallet er allerede bestemt",
+        "At brukeren bare signerer på en ferdig beslutning",
+        "At brukeren har rett til innsyn, men ikke til å påvirke",
+        "At brukeren faktisk kan påvirke valg, løsninger og prioriteringer"
+      ],
+      correctIndex: 3,
+      explanation: "Reell medvirkning = innspillene kan endre kursen. Hvis utfallet er låst, er det bare symbolikk."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hva beskriver best symbolsk brukermedvirkning?",
+      options: [
+        "Brukeren har reell innflytelse på vedtak",
+        "Brukeren bestemmer alt alene",
+        "Brukeren inviteres inn, men beslutningen er i praksis tatt på forhånd",
+        "Brukeren nekter å møte"
+      ],
+      correctIndex: 2,
+      explanation: "Symbolsk medvirkning ser fint ut på papiret, men gir ingen reell makt – brukeren 'får si noe', men ingenting endres."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hva er en typisk strukturell hindring for brukermedvirkning?",
+      options: [
+        "At brukeren har for mye makt",
+        "At tjenestene er for enkle",
+        "Maktforskjeller, profesjonsmakt, tidspress og kompleksitet i systemet",
+        "At lover er for korte"
+      ],
+      correctIndex: 2,
+      explanation: "Profesjonelle kontrollerer informasjon, språk og tid. Det skaper reell maktasymmetri, selv om man snakker fint om 'medvirkning'."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hvorfor kan språk være en hindring for brukermedvirkning?",
+      options: [
+        "Fordi ansatte ikke skal bruke faguttrykk",
+        "Fordi brukeren ikke får lov til å snakke",
+        "Fordi komplisert fagspråk og byråkratiske brev gjør at brukeren ikke skjønner hva som skjer",
+        "Fordi brukeren ikke har lov å spørre om noe"
+      ],
+      correctIndex: 2,
+      explanation: "Hvis bruker ikke forstår begreper, regler og alternativer, er det umulig å medvirke reelt – selv om de formelt 'er med i møtet'."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hva betyr anerkjennelse i denne sammenhengen?",
+      options: [
+        "Å være enig med brukeren i alt",
+        "Å late som man lytter",
+        "Å møte brukeren som et kompetent menneske, ikke bare som et problem",
+        "Å gi brukeren flere skjemaer å fylle ut"
+      ],
+      correctIndex: 2,
+      explanation: "Anerkjennelse handler om respekt, lytting og å se ressursene – at brukeren er mer enn diagnosen eller saken sin."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hva er myndiggjøring (empowerment)?",
+      options: [
+        "At hjelperen tar kontrollen og bestemmer alt for å 'skåne' brukeren",
+        "At brukeren overlates helt til seg selv",
+        "Å bygge opp brukerens egen kapasitet, mestring og innflytelse",
+        "At man kutter i tjenester"
+      ],
+      correctIndex: 2,
+      explanation: "Myndiggjøring handler om å støtte brukeren til å bli aktør i eget liv, ikke passiv mottaker av tjenester."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hvordan henger anerkjennelse og myndiggjøring sammen med brukermedvirkning?",
+      options: [
+        "De gjør det mulig for brukeren å delta på en reell måte, med trygghet og handlingsrom",
+        "De er bare 'kjekt å ha'-begreper",
+        "De handler kun om jurister og lovverk",
+        "De brukes bare i spesialisthelsetjenesten"
+      ],
+      correctIndex: 0,
+      explanation: "Anerkjennelse gir trygghet og verdi, myndiggjøring gir kraft og kapasitet – begge er forutsetninger for ekte medvirkning."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hvorfor gir brukermedvirkning ofte bedre tjenester?",
+      options: [
+        "Fordi det kutter kostnader automatisk",
+        "Fordi det fjerner behovet for faglig kompetanse",
+        "Fordi det øker tillit, motivasjon og treffsikkerheten i tiltak",
+        "Fordi brukeren alltid vet best alene"
+      ],
+      correctIndex: 2,
+      explanation: "Når brukeren bidrar med erfaringene sine, blir løsninger mer relevante, samarbeidet bedre og resultatene ofte sterkere."
+    },
+    {
+      topic: "Brukermedvirkning",
+      question: "Hva kan være et tegn på at medvirkning egentlig er begrenset av regelverk og ressurser?",
+      options: [
+        "At brukeren informeres om egne rettigheter",
+        "At saksbehandler sier: 'Vi må se hva du trenger'",
+        "At diskusjonen handler mest om hva som er 'mulig innenfor rammene', ikke hva som er best for brukeren",
+        "At brukeren blir invitert til nye møter"
+      ],
+      correctIndex: 2,
+      explanation: "Ofte ser man at vedtaket er styrt av budsjetter og lovtolkning, og at medvirkning bare handler om å velge mellom få, trange alternativer."
+    },
+
+    // BAKKEBYRÅKRATI
+    {
+      topic: "Bakkebyråkrati",
+      question: "Hva mener Lipsky med bakkebyråkrater?",
+      options: [
+        "Bare politikere på Stortinget",
+        "Byråkrater som jobber med intern økonomi uten brukerkontakt",
+        "Frontlinjeansatte som møter brukerne og samtidig praktiserer regler",
+        "Journalister som skriver om velferdspolitikk"
+      ],
+      correctIndex: 2,
+      explanation: "NAV-veiledere, barnevernsansatte, lærere og helsepersonell er bakkebyråkrater – de står i møtet mellom system og bruker."
+    },
+    {
+      topic: "Bakkebyråkrati",
+      question: "Hvorfor sier Lipsky at bakkebyråkratene 'er velferdsstaten i praksis'?",
+      options: [
+        "Fordi de skriver alle lover",
+        "Fordi de bestemmer skattenivå",
+        "Fordi det er gjennom deres konkrete avgjørelser at politikken faktisk blir virkelig for brukerne",
+        "Fordi de eier bygningene tjenestene ligger i"
+      ],
+      correctIndex: 2,
+      explanation: "Brukeren møter ikke Stortinget, men saksbehandleren. Det er der velferdsstaten blir konkret og får innhold."
+    },
+    {
+      topic: "Bakkebyråkrati",
+      question: "Hva kjennetegner arbeidshverdagen til bakkebyråkrater?",
+      options: [
+        "Ubegrenset tid per bruker og fravær av regler",
+        "Få brukere og få krav",
+        "Knappe ressurser, mange saker og krav om både å hjelpe og kontrollere",
+        "Kun administrative oppgaver uten brukerkontakt"
+      ],
+      correctIndex: 2,
+      explanation: "De står i krysspress: mange saker, lite tid, detaljerte regler og samtidig ansvar for relasjon og hjelp."
+    },
+    {
+      topic: "Bakkebyråkrati",
+      question: "Hvorfor har bakkebyråkrater mye makt selv om de 'bare følger regler'?",
+      options: [
+        "Fordi de kan ignorere lover fritt",
+        "Fordi de bestemmer statsbudsjettet",
+        "Fordi de tolker regler, prioriterer tid og vurderer hva som er 'nødvendig' i hver sak",
+        "Fordi de kan gi penger uten dokumentasjon"
+      ],
+      correctIndex: 2,
+      explanation: "Skjønn, prioritering og tolkning avgjør hvor mye hjelp brukeren faktisk får – det gir stor praktisk makt."
+    },
+    {
+      topic: "Bakkebyråkrati",
+      question: "Hva beskriver best dilemmaet mellom hjelper- og forvalterrolle?",
+      options: [
+        "Om man trives i jobben eller ikke",
+        "Om man jobber i stat eller kommune",
+        "At man vil støtte brukeren, men også har ansvar for regler, budsjett og kontroll",
+        "Om man bruker papir eller digitale systemer"
+      ],
+      correctIndex: 2,
+      explanation: "Sosialarbeideren er både medmenneske og portvokter – det skaper et etisk og faglig spenningsfelt."
+    },
+    {
+      topic: "Bakkebyråkrati",
+      question: "Hva menes med at skjønn gir makt for bakkebyråkraten?",
+      options: [
+        "At de aldri kan velge",
+        "At alle saker behandles identisk uansett situasjon",
+        "At tolkningen av 'gråsoner' og regelverk får direkte betydning for utfallet for brukeren",
+        "At regler ikke gjelder"
+      ],
+      correctIndex: 2,
+      explanation: "Når loven ikke sier alt, må saksbehandler vurdere – og disse vurderingene kan avgjøre om brukeren får hjelp eller avslag."
+    },
+    {
+      topic: "Bakkebyråkrati",
+      question: "Hvordan påvirker tidsklemma kvaliteten på tjenestene?",
+      options: [
+        "Den gir alltid bedre kvalitet",
+        "Den har ingen effekt på kvaliteten",
+        "Den kan føre til standardiserte løsninger og mindre individuell tilpasning",
+        "Den gjør at alle saker behandles ekstra grundig"
+      ],
+      correctIndex: 2,
+      explanation: "Lite tid → man tyr lett til sjablonger og 'korte løsninger' → mindre rom for å se hele mennesket og tilrettelegge."
+    },
+    {
+      topic: "Bakkebyråkrati",
+      question: "Hvorfor er NAV et godt eksempel på bakkebyråkrati?",
+      options: [
+        "NAV har ingen brukerkontakt",
+        "NAV har ingen regler",
+        "NAV-ansatte må kombinere brukerkontakt med tolkning av lover, økonomi og tidsfrister",
+        "NAV bare deler ut penger uten vurdering"
+      ],
+      correctIndex: 2,
+      explanation: "NAV-veilederen står midt i spenningen mellom brukerens behov, regelverk, budsjettrammer og behandlingsfrister."
+    },
+    {
+      topic: "Bakkebyråkrati",
+      question: "Hva betyr det at velferdspolitikk formes 'nedenfra' gjennom bakkebyråkratiet?",
+      options: [
+        "At brukerne skriver lovteksten",
+        "At politikerne ikke har noe å si",
+        "At summen av alle små vedtak og vurderinger i frontlinjen bestemmer hvordan politikken faktisk oppleves",
+        "At det ikke finnes nasjonale mål"
+      ],
+      correctIndex: 2,
+      explanation: "Selv med like lover kan praksis bli ulik, fordi frontlinjeansatte praktiserer og prioriterer forskjellig – slik formes politikken i hverdagen."
+    }
+  ];
+
+// Dag 7–8
+const questionsDag7_8 = [
+    // PROFESJONSETIKK / ORGANISASJON
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva er hovedpoenget i kapittel 9 om etikk, organisasjon og kultur?",
+      options: [
+        "At etikk bare handler om enkeltansattes moral",
+        "At etikk først og fremst handler om lover og paragrafer",
+        "At organisasjon, økonomi og kultur sterkt påvirker hva som oppleves som 'riktig' praksis",
+        "At etikk kun er relevant i spesialisthelsetjenesten"
+      ],
+      correctIndex: 2,
+      explanation: "Kapittel 9 understreker at lokale føringer, kultur, økonomi og ledelse former etisk praksis – ikke bare individets holdninger."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva menes med at loven står over økonomien?",
+      options: [
+        "At kommuner kan ignorere økonomi fullstendig",
+        "At kommunen alltid kan skylde på tomt budsjett",
+        "At forsvarlighetskravet og lovpålagte oppgaver gjelder selv om ressursene er trange",
+        "At ansatte ikke trenger å bry seg om budsjett"
+      ],
+      correctIndex: 2,
+      explanation: "Selv om kommunen har dårlig økonomi, står kravene i loven fast. Økonomi er ikke en etisk unnskyldning for uforsvarlig praksis."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva er forskjellen på åpne og skjulte verdier i en organisasjon?",
+      options: [
+        "Åpne verdier er ubevisste, skjulte verdier står i etiske dokumenter",
+        "Åpne verdier er det man sier man står for, skjulte verdier er det som faktisk styrer praksis",
+        "Det er ingen forskjell – de er det samme",
+        "Åpne verdier handler bare om økonomi, skjulte om etikk"
+      ],
+      correctIndex: 1,
+      explanation: "Åpne verdier finner du i mål, planer og etiske dokumenter. Skjulte verdier er normer og praksis som utvikler seg i hverdagen – og ofte vinner de."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva er organisasjonskultur ifølge kapittel 9?",
+      options: [
+        "Bare det som står i kommunens verdidokument",
+        "Bare lønnssystemet",
+        "Grunnleggende antakelser, språk, rutiner og praksiser som former handlinger",
+        "Kun lederens personlige mening"
+      ],
+      correctIndex: 2,
+      explanation: "Organisasjonskultur er summen av det som sitter i veggene: uformelle regler, vaner, humor, språk og 'slik gjør vi det her'."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hvordan kan sosialisering og disiplinering påvirke nye ansatte?",
+      options: [
+        "De forblir helt upåvirket av arbeidsplassen",
+        "De følger bare det de lærte i fagbøkene",
+        "De lærer 'måten vi gjør det på her', som kan normalisere både gode og dårlige praksiser",
+        "De bestemmer alene hvordan ting skal gjøres"
+      ],
+      correctIndex: 2,
+      explanation: "Nye ansatte tilpasser seg kulturen de går inn i – også når kulturen er problematisk eller uetisk."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva er etisk risiko ved ventilering på jobb?",
+      options: [
+        "At det gir for mye støtte",
+        "At det hindrer refleksjon",
+        "At det kan gli over i nedsettende språk og avhumanisering av brukere",
+        "At det gjør alle for snille"
+      ],
+      correctIndex: 2,
+      explanation: "Ventilering kan være viktig, men hvis kulturen blir å snakke ned brukerne, påvirker det både holdninger og beslutninger."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva er profesjonsetikk ifølge kapittel 10 og FO-dokumentet?",
+      options: [
+        "Personlige meninger om moral",
+        "En liste med regler uten verdi",
+        "Verdier, normer og begrunnelser for hvordan du handler som profesjonsutøver",
+        "Kun jussen i faget"
+      ],
+      correctIndex: 2,
+      explanation: "Profesjonsetikk handler om å begrunne handlingene sine ut fra fag, verdier og ansvar – ikke bare gjøre det som er lett."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva kjennetegner den profesjonelle rollen i sosialt arbeid?",
+      options: [
+        "At du alltid er privat venn med brukeren",
+        "At du kun har kontrollrolle",
+        "At du både har hjelperrolle og kontrollrolle, og må være bevisst makt og ansvar",
+        "At du bare følger instruks uten skjønn"
+      ],
+      correctIndex: 2,
+      explanation: "Rollebevissthet er sentralt: du skal både støtte og utøve myndighet – det skaper etiske dilemmaer."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hvilket etisk prinsipp handler mest om selvbestemmelse?",
+      options: [
+        "Verdighet",
+        "Autonomi",
+        "Ikke-skade-prinsippet",
+        "Rettferdighet"
+      ],
+      correctIndex: 1,
+      explanation: "Autonomi handler om brukerens rett til å ta valg i eget liv – så langt det er forenlig med andre hensyn."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva er kjernen i faglig skjønn i sosialt arbeid?",
+      options: [
+        "Å gå på magefølelse",
+        "Å følge standardløsninger uten refleksjon",
+        "Å bruke fagkunnskap, verdier og vurdering av situasjonen til å velge mellom mulige løsninger",
+        "Å gjøre det som er raskest"
+      ],
+      correctIndex: 2,
+      explanation: "Skjønn er å vurdere, ikke bare følge sjekklister. Men det må være begrunnet og forsvarlig, ikke tilfeldig."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hvorfor er varslingsplikt et etisk tema, ikke bare juridisk?",
+      options: [
+        "Fordi varsling bare handler om lojalitet til sjefen",
+        "Fordi loven krever at man aldri varsler",
+        "Fordi det handler om mot, risiko for sanksjoner og ansvar for å beskytte brukere mot skade",
+        "Fordi det alltid er lett å varsle"
+      ],
+      correctIndex: 2,
+      explanation: "Selv om arbeidsmiljøloven gir vern, er det kulturen som avgjør om det faktisk er trygt å si fra om uetiske forhold."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva sier FO om hvem lojaliteten først og fremst skal være til?",
+      options: [
+        "Arbeidsgiverens økonomi",
+        "Kollegene",
+        "Den mest utsatte parten / brukeren",
+        "Media"
+      ],
+      correctIndex: 2,
+      explanation: "FO er tydelig: lojaliteten kan ikke først og fremst være til budsjett eller system – den mest utsatte parten skal prioriteres."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hvorfor er følelser relevante i profesjonsetikk?",
+      options: [
+        "Fordi profesjonelt arbeid bare er følelsesstyrt",
+        "Fordi følelser aldri har noe å si",
+        "Fordi følelser påvirker vurderinger, og man må kjenne egne reaksjoner for å handle etisk",
+        "Fordi man skal følge første impuls"
+      ],
+      correctIndex: 2,
+      explanation: "Hvis du ikke er bevisst egne følelser (irritasjon, frykt, sympati), kan de styre skjønnet ditt uten at du merker det."
+    },
+
+    // FO-VERDIER
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva betyr menneskeverd som FO-verdi?",
+      options: [
+        "At noen mennesker er mer verdt enn andre",
+        "At økonomi alltid går foran",
+        "At alle har samme grunnleggende verdi, og at du skal forsvare liv, helse og motarbeide vold og tvang",
+        "At brukeren må klare seg selv"
+      ],
+      correctIndex: 2,
+      explanation: "Menneskeverd er grunnsteinen – det forplikter deg til å beskytte liv, helse og motarbeide krenkelser."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva innebærer respekt for integritet ifølge FO?",
+      options: [
+        "At brukeren aldri skal motsies",
+        "At brukeren skal ha makt og kontroll over eget liv så langt som mulig",
+        "At du bestemmer alt som er 'best'",
+        "At du aldri informerer brukeren"
+      ],
+      correctIndex: 1,
+      explanation: "Integritet = grensen rundt personen. Brukerens egne valg og verdier skal tas på alvor, innenfor menneskerettigheter og lov."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva menes med helhetssyn på mennesker?",
+      options: [
+        "At bare individet er relevant",
+        "At bare systemet er viktig",
+        "At individ og samfunn påvirker hverandre, og mange har sammensatte behov",
+        "At man skal ignorere strukturer"
+      ],
+      correctIndex: 2,
+      explanation: "Helhetssyn betyr å se både person, relasjoner, økonomi, helse, bolig, arbeid og politikk i sammenheng."
+    },
+    {
+      topic: "Profesjonsetikk",
+      question: "Hva er en etisk utfordring med digitale tjenester?",
+      options: [
+        "At de alltid er uetiske",
+        "At brukere aldri vil bruke dem",
+        "Risiko for misforståelser, manglende nyanser og at noen ekskluderes",
+        "At det ikke finnes regler for personvern"
+      ],
+      correctIndex: 2,
+      explanation: "Digitalisering krever ekstra tydelighet, tilgjengelighet og bevissthet om personvern og inkludering."
+    },
+
+    // STORTING / STYRINGSKJEDEN / KOMMUNE
+    {
+      topic: "Styring",
+      question: "Hva er Stortingets viktigste roller i styringssystemet?",
+      options: [
+        "Å gjennomføre vedtak fra regjeringen",
+        "Å ansette alle kommunalt ansatte",
+        "Å vedta lover og statsbudsjett, og føre kontroll med regjeringen",
+        "Å styre enkeltvedtak i NAV-saker"
+      ],
+      correctIndex: 2,
+      explanation: "Stortinget er lovgivende makt og budsjettmakt, og har kontrollfunksjon overfor regjeringen."
+    },
+    {
+      topic: "Styring",
+      question: "Hva beskriver styringskjeden best?",
+      options: [
+        "Regjeringen → Stortinget → Kommune → Folk",
+        "Folk → Kommune → Direktorat → Storting",
+        "Folk → Storting → Regjering → Departementer/direktorater → Kommuner",
+        "Kommuner → Direktorat → Folk → Storting"
+      ],
+      correctIndex: 2,
+      explanation: "Folket velger Stortinget, som igjen gir makt til regjering, som styrer gjennom departementer/direktorater ned mot kommunene."
+    },
+    {
+      topic: "Styring",
+      question: "Hva gjør statsbudsjettet i denne sammenhengen?",
+      options: [
+        "Det regulerer bare privat økonomi",
+        "Det bestemmer hvor mye penger kommunene og velferdsordninger faktisk får",
+        "Det gjelder bare for næringslivet",
+        "Det brukes kun til utenrikspolitikk"
+      ],
+      correctIndex: 1,
+      explanation: "Statsbudsjettet er politikk i kroner og øre – det avgjør rammene for NAV, helse, barnevern, skole osv."
+    },
+    {
+      topic: "Styring",
+      question: "Hva er kommunestyret i en kommune?",
+      options: [
+        "En administrativ avdeling",
+        "Et direktorat",
+        "Det øverste folkevalgte organet i kommunen",
+        "En fagforening"
+      ],
+      correctIndex: 2,
+      explanation: "Kommunestyret er lokalt «mini-storting» – vedtar budsjett, planer og politiske prioriteringer."
+    },
+    {
+      topic: "Styring",
+      question: "Hva er kommunedirektørens (tidl. rådmannens) rolle?",
+      options: [
+        "Å være øverste politiske leder",
+        "Å lede administrasjonen og sørge for at vedtak blir gjennomført",
+        "Å styre Stortinget",
+        "Å representere kommunen i domstolene"
+      ],
+      correctIndex: 1,
+      explanation: "Kommunedirektøren er øverste administrative leder og har ansvar for å iverksette kommunestyrets vedtak."
+    },
+    {
+      topic: "Styring",
+      question: "Hva menes med lokalt selvstyre?",
+      options: [
+        "At kommunene kan gjøre hva de vil uten lovgrunnlag",
+        "At kommuner er egne rettssubjekter og kan ta lokale beslutninger innenfor rammene av lovverket",
+        "At staten ikke kan gi kommuner oppgaver",
+        "At kommuner ikke trenger å følge nasjonale lover"
+      ],
+      correctIndex: 1,
+      explanation: "Lokalt selvstyre betyr frihet innenfor lov. Staten styrer gjennom lov og økonomi, ikke detaljinstrukser i enkeltsaker."
+    },
+    {
+      topic: "Styring",
+      question: "Hvordan påvirker kommunal økonomi utsatte grupper?",
+      options: [
+        "Den har ingen betydning for tjenester",
+        "Den påvirker om kommunen klarer å gi forsvarlige tjenester og hvor mye som går til forebygging",
+        "Den bestemmer hvem som får stemme",
+        "Den handler bare om vei og asfalt"
+      ],
+      correctIndex: 1,
+      explanation: "Trange budsjetter kan føre til kutt, færre stillinger og mindre forebygging – noe som rammer utsatte grupper hardest."
+    },
+    {
+      topic: "Styring",
+      question: "Hva betyr det at lovpålagte oppgaver 'binder' kommunale ressurser?",
+      options: [
+        "At kommunen fritt kan prioritere bort lovpålagte tjenester",
+        "At kommunen først må finansiere lovpålagte tjenester før frivillige oppgaver",
+        "At kommunen ikke kan drive med kultur",
+        "At alt går til administrasjon"
+      ],
+      correctIndex: 1,
+      explanation: "Lover som pålegger tjenester (barnevern, helse, skole) må prioriteres. Resten kan kuttes først når økonomien er stram."
+    },
+    {
+      topic: "Styring",
+      question: "Hvordan kan nasjonal politikk indirekte påvirke en enkelt bruker i kommunen?",
+      options: [
+        "Den har ingen sammenheng",
+        "Kun gjennom valgresultat lokalt",
+        "Gjennom lover, statsbudsjett og rammer som former hva NAV, helse og barnevern kan tilby",
+        "Bare gjennom utenrikspolitikk"
+      ],
+      correctIndex: 2,
+      explanation: "Endringer i trygderegler, satser eller kommunerammer slår direkte ut i den hjelpen enkeltpersoner får lokalt."
+    }
+  ];
+
+// Dag 9–10
+const questionsDag9_10 = [
+    // KJERNE
+    {
+      topic: "Kjerne",
+      question: "Hva er kjernen i trygderetten slik den beskrives i notatet?",
+      options: [
+        "Å gi NAV størst mulig handlefrihet",
+        "Å regulere forholdet mellom arbeidsgivere og arbeidstakere",
+        "Å fastsette hvilke rettigheter folk har til ytelser som AAP, uføretrygd, sykepenger og sosialhjelp",
+        "Å styre kommunenes budsjettprosesser"
+      ],
+      correctIndex: 2,
+      explanation: "Trygderett handler om hvem som har rett til hvilke ytelser, på hvilke vilkår, og hvordan forvaltningen skal vurdere og begrunne dette."
+    },
+    {
+      topic: "Kjerne",
+      question: "Hva er hoveddilemmaet for profesjonsutøvere i trygderetten?",
+      options: [
+        "Å velge mellom ulike yrker",
+        "Å bestemme skattenivå",
+        "Å forstå grensene mellom klare rettigheter og skjønnsmessige vurderinger",
+        "Å skrive lover i Stortinget"
+      ],
+      correctIndex: 2,
+      explanation: "Kjernen er å se hva som er bindende rettigheter, og hvor forvaltningen faktisk har et skjønnsrom – og hvordan det skal brukes forsvarlig."
+    },
+
+    // RETTSSIKKERHET
+    {
+      topic: "Rettssikkerhet",
+      question: "Hva betyr rettssikkerhet i trygderetten?",
+      options: [
+        "At NAV kan bestemme fritt når de vil hjelpe",
+        "At avgjørelser skal være forutsigbare, etterprøvbare og basert på lov",
+        "At brukeren aldri kan klage",
+        "At økonomi alltid går foran alt annet"
+      ],
+      correctIndex: 1,
+      explanation: "Rettssikkerhet handler om vern mot vilkårlighet: avgjørelser skal bygge på lov, ikke tilfeldige vurderinger."
+    },
+    {
+      topic: "Rettssikkerhet",
+      question: "Hvorfor må NAV begrunne alle vedtak skriftlig?",
+      options: [
+        "For å ha mer papirarbeid",
+        "For å gjøre det vanskelig å klage",
+        "For at bruker skal kunne forstå vedtaket, vurdere om det er riktig og eventuelt klage",
+        "Kun fordi det står i en intern rutine"
+      ],
+      correctIndex: 2,
+      explanation: "Begrunnelsen gjør vedtaket etterprøvbart og er en forutsetning for rett til klage og kontroll."
+    },
+    {
+      topic: "Rettssikkerhet",
+      question: "Hvilket krav er viktigst for å unngå vilkårlige forskjeller mellom brukere?",
+      options: [
+        "At NAV har mange kontorer",
+        "At alle vedtak behandles av samme saksbehandler",
+        "At vedtak bygger på lov, dokumentasjon og saklige vurderinger",
+        "At NAV ikke skriver noe ned"
+      ],
+      correctIndex: 2,
+      explanation: "Når avgjørelser er begrunnet i lov og fakta, reduseres risikoen for at personlige holdninger styrer utfallet."
+    },
+
+    // INDIVIDUELL VURDERING
+    {
+      topic: "Individuell",
+      question: "Hva menes med individuell vurdering i trygderetten?",
+      options: [
+        "At alle behandles helt likt uansett situasjon",
+        "At NAV bruker standardtekst i alle vedtak",
+        "At NAV må vurdere den konkrete situasjonen til den enkelte, ikke bare bruke standardløsninger",
+        "At brukeren selv skriver vedtaket"
+      ],
+      correctIndex: 2,
+      explanation: "Individuell vurdering betyr at man tar hensyn til faktisk helsetilstand, arbeidsevne, økonomi osv. i hver enkelt sak."
+    },
+    {
+      topic: "Individuell",
+      question: "Hva er et sentralt prinsipp for likhet i forvaltningen?",
+      options: [
+        "At alle vedtak skal være forskjellige",
+        "At to like tilfeller skal behandles likt, og ulike tilfeller ulikt",
+        "At alle får avslag første gang",
+        "At alle får innvilget uansett vilkår"
+      ],
+      correctIndex: 1,
+      explanation: "Likhetsprinsippet krever både likebehandling av like tilfeller og tilpasning når situasjonen er ulik."
+    },
+    {
+      topic: "Individuell",
+      question: "Hva kan være en konsekvens hvis NAV ikke gjør reell individuell vurdering?",
+      options: [
+        "At vedtaket blir mer effektivt",
+        "At vedtaket automatisk blir gyldig",
+        "At vedtaket kan være ugyldig og gi gode klagemuligheter",
+        "At brukeren mister klagerett"
+      ],
+      correctIndex: 2,
+      explanation: "Manglende individuell vurdering kan være en saksbehandlingsfeil som gjør at vedtaket kan oppheves."
+    },
+
+    // SAKSBEHANDLING
+    {
+      topic: "Saksbehandling",
+      question: "Hva betyr det at NAV har utredningsplikt?",
+      options: [
+        "At NAV kun skal lese det brukeren selv skriver",
+        "At NAV skal utrede saken så godt som mulig før de fatter vedtak",
+        "At NAV alltid kan fatte vedtak uten informasjon",
+        "At NAV aldri kan innhente legeopplysninger"
+      ],
+      correctIndex: 1,
+      explanation: "Utredningsplikten innebærer å innhente nødvendige opplysninger slik at vedtaket bygger på et riktig og tilstrekkelig faktum."
+    },
+    {
+      topic: "Saksbehandling",
+      question: "Hvilke rettigheter har brukeren under saksbehandlingen?",
+      options: [
+        "Ingen særskilte rettigheter",
+        "Kun rett til å betale gebyr",
+        "Rett til å bli hørt, rett til innsyn og rett til begrunnelse",
+        "Rett til å skrive vedtaket selv"
+      ],
+      correctIndex: 2,
+      explanation: "Forvaltningsloven gir rett til å uttale seg, se dokumentene og få en begrunnelse – det er selve fundamentet for rettssikkerhet."
+    },
+    {
+      topic: "Saksbehandling",
+      question: "Hva er en saksbehandlingsfeil?",
+      options: [
+        "Når brukeren ikke er fornøyd",
+        "Når NAV bruker for mye tid",
+        "Når NAV bryter krav til utredning, innsyn, høring eller begrunnelse",
+        "Når NAV innvilger en ytelse"
+      ],
+      correctIndex: 2,
+      explanation: "Hvis lovens krav til prosess ikke følges, kan vedtaket være ugyldig selv om resultatet kunne vært det samme."
+    },
+
+    // KLAGE
+    {
+      topic: "Klage",
+      question: "Hvorfor er klageordningen sentral for rettssikkerheten?",
+      options: [
+        "Fordi den gjør systemet tregere",
+        "Fordi den gir NAV mer makt",
+        "Fordi brukeren kan få en ny, uavhengig vurdering av vedtaket uten kostnad",
+        "Fordi klage alltid gir automatisk innvilgelse"
+      ],
+      correctIndex: 2,
+      explanation: "Klageordningen er et kontrollpunkt der et annet organ sjekker både jus, faktum og skjønn."
+    },
+    {
+      topic: "Klage",
+      question: "Hva vurderer klageinstansen typisk i en klagesak?",
+      options: [
+        "Bare hvorvidt brukeren er hyggelig",
+        "Kun om NAV har nok penger",
+        "Om loven er forstått riktig, om saken er godt nok opplyst og om skjønnet er forsvarlig brukt",
+        "Om saksbehandler liker brukeren"
+      ],
+      correctIndex: 2,
+      explanation: "Klageinstansen kontrollerer rettsgrunnlaget, faktum og skjønnsutøvelsen – hele vedtaket testes på nytt."
+    },
+    {
+      topic: "Klage",
+      question: "Hva er en viktig funksjon ved at klage er gratis for brukeren?",
+      options: [
+        "At det brukes mindre ressurser",
+        "At bare rike kan klage",
+        "At terskelen for å prøve vedtaket på nytt blir lavere, noe som styrker rettssikkerheten",
+        "At NAV kan kreve gebyr senere"
+      ],
+      correctIndex: 2,
+      explanation: "Gratis klagerett gjør at økonomi ikke blir et hinder for å få prøvd vedtaket på nytt."
+    },
+
+    // RETTIGHETER VS SKJØNN
+    {
+      topic: "Skjonn",
+      question: "Hva kjennetegner en lovfestet rettighet i trygderetten?",
+      options: [
+        "At NAV kan velge om de vil innvilge",
+        "At Stortinget ikke har bestemt vilkår",
+        "At brukeren har krav på ytelsen hvis vilkårene er oppfylt",
+        "At det alltid er opp til saksbehandlers følelser"
+      ],
+      correctIndex: 2,
+      explanation: "Rettighet = plikt for NAV: oppfyller du vilkårene, skal ytelsen innvilges."
+    },
+    {
+      topic: "Skjonn",
+      question: "Hva kjennetegner forvaltningens skjønnsrom?",
+      options: [
+        "At det aldri finnes lovhjemmel",
+        "At loven overlater en vurdering til NAV, for eksempel ved begreper som 'vesentlig nedsatt arbeidsevne'",
+        "At NAV kan se bort fra loven",
+        "At det kun brukes i strafferetten"
+      ],
+      correctIndex: 1,
+      explanation: "Skjønn oppstår når loven legger opp til en konkret vurdering – ikke når det er fritt fram."
+    },
+    {
+      topic: "Skjonn",
+      question: "Hvorfor kan skjønnsutøvelse gi risiko for ulik behandling?",
+      options: [
+        "Fordi alle følger samme mal",
+        "Fordi skjønn alltid gir identiske vedtak",
+        "Fordi ulike saksbehandlere kan legge ulik vekt på momenter og tolke vilkår forskjellig",
+        "Fordi loven er helt presis"
+      ],
+      correctIndex: 2,
+      explanation: "Når vurderingsrommet er stort, øker sjansen for variasjon i praksis – både mellom kontorer og mellom saksbehandlere."
+    },
+    {
+      topic: "Skjonn",
+      question: "Hvordan skal rettssikkerhet og saksbehandling begrense risikoen ved skjønn?",
+      options: [
+        "Ved å skjule vurderingene",
+        "Ved å hindre klage",
+        "Ved krav til begrunnelse, dokumentasjon, utredning og klageadgang",
+        "Ved å gi full frihet uten regler"
+      ],
+      correctIndex: 2,
+      explanation: "Når skjønnet begrunnes skriftlig og kan kontrolleres, blir det mindre rom for vilkårlighet."
+    }
+  ];
+
+// ===== Meta og nivå-inndeling =====
+
+const topicMap = {
+  "Begreper": "Begreper / grunnleggende",
+  "Velferdsmodeller": "Velferdsstatens modeller",
+  "Lødemel": "Lødemel – sosialpolitikk",
+  "Kjørstad": "Kjørstad – NAV og arbeidslinja",
+  "Berg": "Berg – sikkerhetsnett",
+  "Marginalisering": "Marginalisering og systemsvikt",
+  "Folketrygden": "Folketrygden",
+  "Ytelser": "Ytelser og forskjeller",
+  "Innstramminger": "Innstramminger og utsatte grupper",
+  "Kommunen": "Kommunens ansvar og HOL",
+  "Brukermedvirkning": "Brukermedvirkning",
+  "Bakkebyråkrati": "Bakkebyråkrati (Lipsky)",
+  "Profesjonsetikk": "Profesjonsetikk og organisasjon",
+  "Styring": "Stortinget, styringskjeden og kommunene",
+  "Kjerne": "Trygderett – kjernen",
+  "Rettssikkerhet": "Rettssikkerhet",
+  "Individuell": "Individuell vurdering",
+  "Saksbehandling": "Saksbehandling",
+  "Klage": "Klageordning",
+  "Skjonn": "Rettigheter vs skjønn"
+};
+
+const tierLabels = {
+  1: "Tier 1: Grunnleggende (Dag 1–4)",
+  2: "Tier 2: Mellomnivå (Dag 5–6)",
+  3: "Tier 3: Avansert (Dag 7–10)"
+};
+
+function tagQuestionsWithMeta(source, dayLabel, tier) {
+  return source.map(q => ({
+    ...q,
+    day: dayLabel,
+    tier: tier
+  }));
+}
+
+const allQuestions = [
+  ...tagQuestionsWithMeta(questionsDag1_2, "Dag 1–2", 1),
+  ...tagQuestionsWithMeta(questionsDag3_4, "Dag 3–4", 1),
+  ...tagQuestionsWithMeta(questionsDag5_6, "Dag 5–6", 2),
+  ...tagQuestionsWithMeta(questionsDag7_8, "Dag 7–8", 3),
+  ...tagQuestionsWithMeta(questionsDag9_10, "Dag 9–10", 3)
+];
+
+// ===== State =====
+
+let unlockedTier = 1;
+let totalCorrectPractice = 0;
+let perfectRun = 0;
+const perfectGoal = 10;
+let practiceAnswered = new Array(allQuestions.length).fill(false);
+let practiceIndices = [];
+let practicePos = 0;
+
+let inExam = false;
+let examIndices = [];
+let examPos = 0;
+let examAnswers = {};
+let examFinished = false;
+
+// DOM
+const topicTagEl = document.getElementById("topicTag");
+const dayTagEl = document.getElementById("dayTag");
+const tierTagEl = document.getElementById("tierTag");
+const counterTagEl = document.getElementById("counterTag");
+const questionTextEl = document.getElementById("questionText");
+const optionsContainerEl = document.getElementById("optionsContainer");
+const feedbackEl = document.getElementById("feedback");
+const deepDiveEl = document.getElementById("deepDive");
+const examSummaryEl = document.getElementById("examSummary");
+const progressInnerEl = document.getElementById("progressInner");
+const progressTextEl = document.getElementById("progressText");
+const scoreTextEl = document.getElementById("scoreText");
+const answeredTextEl = document.getElementById("answeredText");
+const tierStatusTextEl = document.getElementById("tierStatusText");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const randomBtn = document.getElementById("randomBtn");
+const examBtn = document.getElementById("examBtn");
+const examBannerTextEl = document.getElementById("examBannerText");
+
+
+// Ekstra dypdykk-tekster per tema (lengre forklaringer)
+
+const topicDeepDives = {
+  "Brukermedvirkning": `
+    <p>Brukermedvirkning betyr at brukeren faktisk får påvirke beslutningene som angår dem, ikke bare blir informert.</p>
+    <p>Det handler om maktfordeling: anerkjennelse, tydelig informasjon og reelle valg for brukeren.</p>
+    <p>Når medvirkning bare er formell, blir den symbolsk. Reell medvirkning gir bedre tiltak og større opplevelse av kontroll.</p>
+  `,
+  "Bakkebyråkrati": `
+    <p>Bakkebyråkrater er frontlinjeansatte som NAV-veiledere og barnevernsansatte som omsetter lov og politikk til praksis.</p>
+    <p>De bruker skjønn når de vurderer behov og vedtak, og jobber ofte i tidsklemme med motstridende krav og for lite ressurser.</p>
+    <p>Dette forklarer både variasjon i praksis og hvorfor noen brukere opplever urettferdighet og systemsvikt.</p>
+  `,
+  "Profesjonsetikk": `
+    <p>Profesjonsetikk handler om hvordan fagpersoner begrunner valg innenfor lovverk, rammer og verdier – ikke bare personlig moral.</p>
+    <p>Dilemma oppstår når systemkrav, økonomi og tidspress kolliderer med brukernes behov og rettigheter.</p>
+    <p>God profesjonsetikk krever refleksjon, faglig begrunnelse og bevissthet om maktposisjonen man har.</p>
+  `,
+  "Styring": `
+    <p>Styringskjeden viser hvordan Storting, regjering og kommuner sammen former tjenestene brukerne møter.</p>
+    <p>Stortinget vedtar lover og budsjett, mens kommunene organiserer og prioriterer lokalt innenfor disse rammene.</p>
+    <p>Det forklarer hvorfor tjenestekvalitet kan variere mellom kommuner, selv om lovverket er det samme.</p>
+  `,
+  "Kjerne": `
+    <p>Kjernen i trygderetten er å avklare hvem som har rett til ytelser, hvilke vilkår som gjelder og hvordan forvaltningen skal vurdere saker.</p>
+    <p>Systemet skal sikre inntekt ved sykdom, funksjonsnedsettelse og andre livskriser, og samtidig ivareta rettssikkerhet og likebehandling.</p>
+    <p>Til eksamen bør du alltid koble trygderett til både økonomisk trygghet og rettferdighet.</p>
+  `,
+  "Rettssikkerhet": `
+    <p>Rettssikkerhet betyr at vedtak ikke skal være tilfeldige, men bygge på lov, fakta og gode begrunnelser.</p>
+    <p>Utredningsplikt, innsyn, begrunnelse og klageadgang beskytter brukeren mot vilkårlig maktutøvelse.</p>
+    <p>Dårlig saksbehandling er derfor ikke bare «rot», men et rettssikkerhetsproblem.</p>
+  `,
+  "Individuell": `
+    <p>Individuell vurdering betyr at NAV må se den konkrete situasjonen til hver enkelt, ikke bare følge standardmaler.</p>
+    <p>Det krever vurdering av helse, arbeidsevne, økonomi og livssituasjon samlet.</p>
+    <p>Uten individuell vurdering blir vedtakene lite treffsikre og kan oppleves urettferdige.</p>
+  `,
+  "Saksbehandling": `
+    <p>God saksbehandling handler om at saken er tilstrekkelig opplyst før vedtak fattes, og at prosessen er ryddig og etterprøvbar.</p>
+    <p>Det innebærer å innhente relevant informasjon, involvere bruker og dokumentere vurderinger.</p>
+    <p>Feil i saksbehandlingen kan gi ugyldige vedtak og svekke tilliten til systemet.</p>
+  `,
+  "Klage": `
+    <p>Klageordningen gir brukeren mulighet til å få en ny vurdering av saken når de mener noe er feil.</p>
+    <p>Klageinstansen kontrollerer både faktagrunnlag, lovanvendelse og skjønnsutøvelse.</p>
+    <p>Klager er en viktig del av rettssikkerheten, ikke bare «mas» fra misfornøyde brukere.</p>
+  `,
+  "Skjonn": `
+    <p>Skjønn brukes når loven åpner for vurdering, for eksempel ved vilkår som «vesentlig nedsatt arbeidsevne».</p>
+    <p>Det gir rom for å ta hensyn til individuelle forskjeller, men kan også føre til ulik praksis.</p>
+    <p>Derfor er det avgjørende at skjønnet begrunnes godt og bygger på faglig vurdering.</p>
+  `,
+  "Marginalisering": `
+    <p>Marginalisering handler om at mennesker skyves ut av sentrale arenaer som arbeid, utdanning og fellesskap.</p>
+    <p>Strukturelle forhold som fattigdom, helse, bosted og diskriminering bidrar ofte til dette.</p>
+    <p>Sosialpolitikk og sosialt arbeid forsøker å motvirke marginalisering ved å fjerne barrierer og styrke muligheter.</p>
+  `,
+  "Berg": `
+    <p>Berg beskriver sikkerhetsnettet i velferdsstaten – ordninger som skal hindre at folk faller ned i varig fattigdom.</p>
+    <p>Det handler både om universelle ytelser og behovsprøvde ordninger som sosialhjelp.</p>
+    <p>Hvor godt sikkerhetsnettet fungerer, viser hvor rettferdig og solidarisk samfunnet faktisk er.</p>
+  `,
+  "Kjørstad": `
+    <p>Kjørstad analyserer NAV sin rolle som både hjelper og portvokter i arbeidslinja.</p>
+    <p>Veilederen skal støtte brukeren, men også vurdere rett til ytelser og stille krav om aktivitet når det er mulig.</p>
+    <p>Det skaper etisk og faglig spenn mellom kontroll, støtte og myndiggjøring.</p>
+  `,
+  "Lødemel": `
+    <p>Lødemel viser hvordan sosialpolitikken forsøker å kombinere økonomisk trygghet med krav om deltakelse og arbeid.</p>
+    <p>Det oppstår spenninger mellom å hjelpe og å stille krav, særlig for de mest utsatte.</p>
+    <p>Begrepene inkludering, ekskludering og marginalisering er sentrale i analysen.</p>
+  `,
+  "Velferdsmodeller": `
+    <p>Velferdsmodeller beskriver ulike måter å organisere fordeling av goder og byrder i samfunnet på.</p>
+    <p>Den nordiske modellen kjennetegnes av universelle ordninger, høy skattevilje og sterk vekt på likhet.</p>
+    <p>Å forstå modellene gjør det lettere å se hva som står på spill når systemet strammes inn eller bygges ned.</p>
+  `,
+  "Folketrygden": `
+    <p>Folketrygden sikrer inntekt ved sykdom, uførhet, alder og andre livssituasjoner der folk ikke kan jobbe.</p>
+    <p>Noen ytelser er universelle, andre avhenger av tidligere inntekt og arbeidstilknytning.</p>
+    <p>Systemet skal både gi trygghet og støtte arbeidslinja.</p>
+  `,
+  "Ytelser": `
+    <p>Ulike ytelser i folketrygden har ulike formål, vilkår og konsekvenser for mottakeren.</p>
+    <p>Sykepenger skal være midlertidig inntektssikring, mens uføretrygd og AAP håndterer mer langvarige situasjoner.</p>
+    <p>Å skille mellom disse er viktig når du drøfter rettigheter og plikter.</p>
+  `,
+  "Innstramminger": `
+    <p>Innstramminger i regelverk og ytelser rammer ofte de gruppene som allerede er utsatt.</p>
+    <p>De kan øke presset på å være i arbeid, men også øke risikoen for fattigdom og utenforskap.</p>
+    <p>Til eksamen kan du drøfte hvordan innstramminger påvirker både systemet og enkeltmennesker.</p>
+  `,
+  "Kommunen": `
+    <p>Kommunen har ansvar for mange velferdstjenester, blant annet helse- og omsorgstjenester og økonomisk sosialhjelp.</p>
+    <p>De må balansere lovkrav mot begrensede ressurser og lokale politiske prioriteringer.</p>
+    <p>Det gjør kommunen til en nøkkelaktør i hvordan rettigheter faktisk realiseres.</p>
+  `
+};
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+function getAvailablePracticeIndices() {
+  const indices = [];
+  allQuestions.forEach((q, i) => {
+    if (q.tier <= unlockedTier) indices.push(i);
+  });
+  shuffleArray(indices);
+  return indices;
+}
+
+function initPracticeState() {
+  practiceIndices = getAvailablePracticeIndices();
+  practicePos = 0;
+}
+
+function updateUnlockedTierIfNeeded() {
+  if (unlockedTier === 1 && totalCorrectPractice >= 15) {
+    unlockedTier = 2;
+    alert("Tier 2 låst opp: Nå er Dag 5–6 med i miksen.");
+    initPracticeState();
+  }
+  if (unlockedTier === 2 && totalCorrectPractice >= 35) {
+    unlockedTier = 3;
+    alert("Tier 3 låst opp: Nå er Dag 7–10 også med.");
+    initPracticeState();
+  }
+}
+
+function renderQuestion() {
+  if (inExam) {
+    renderExamQuestion();
+  } else {
+        perfectRun = 0;
+    renderPracticeQuestion();
+  }
+}
+
+function renderPracticeQuestion() {
+  examSummaryEl.style.display = "none";
+
+  if (practiceIndices.length === 0) {
+    questionTextEl.textContent = "Ingen spørsmål tilgjengelig. Noe er galt med datasettet.";
+    optionsContainerEl.innerHTML = "";
+    feedbackEl.textContent = "";
+    topicTagEl.textContent = "";
+    dayTagEl.textContent = "";
+    tierTagEl.textContent = "";
+    counterTagEl.textContent = "";
+    progressInnerEl.style.width = "0%";
+    progressTextEl.textContent = "";
+    scoreTextEl.textContent = "";
+    answeredTextEl.textContent = "";
+    tierStatusTextEl.textContent = "";
+    return;
+  }
+
+  const globalIdx = practiceIndices[practicePos];
+  const q = allQuestions[globalIdx];
+
+  topicTagEl.textContent = topicMap[q.topic] || q.topic || "";
+  dayTagEl.textContent = q.day || "";
+  tierTagEl.textContent = tierLabels[q.tier] || "";
+  counterTagEl.textContent = `Spørsmål ${practicePos + 1} / ${practiceIndices.length}`;
+  questionTextEl.textContent = q.question;
+  feedbackEl.textContent = "";
+  if (deepDiveEl) { deepDiveEl.style.display = "none"; deepDiveEl.innerHTML = ""; }
+
+  const total = practiceIndices.length;
+  const globalAnswered = practiceAnswered.filter(Boolean).length;
+  const percent = ((practicePos + 1) / total) * 100;
+  progressInnerEl.style.width = percent + "%";
+  progressTextEl.textContent = `Fremgang innenfor nåværende nivå: ${practicePos + 1} av ${total}`;
+  scoreTextEl.textContent = `Riktige i øvingsmodus: ${totalCorrectPractice}`;
+  answeredTextEl.textContent = `Besvart totalt: ${globalAnswered} / ${allQuestions.length}`;
+  tierStatusTextEl.textContent = tierLabels[unlockedTier];
+
+  // Alternativer
+  optionsContainerEl.innerHTML = "";
+  const optionOrder = [0, 1, 2, 3];
+  shuffleArray(optionOrder);
+
+  optionOrder.forEach((optIdx, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.dataset.originalIndex = optIdx;
+    btn.dataset.globalIndex = globalIdx;
+
+    const prefix = document.createElement("span");
+    prefix.className = "option-prefix";
+    prefix.textContent = String.fromCharCode(65 + i) + ".";
+
+    const txt = document.createElement("span");
+    txt.className = "txt";
+    txt.textContent = q.options[optIdx];
+
+    const status = document.createElement("span");
+    status.className = "option-status";
+    status.textContent = "";
+
+    btn.appendChild(prefix);
+    btn.appendChild(txt);
+    btn.appendChild(status);
+
+    btn.addEventListener("click", () => handlePracticeAnswer(btn, globalIdx));
+
+    optionsContainerEl.appendChild(btn);
+  });
+}
+
+function handlePracticeAnswer(btn, globalIdx) {
+  const q = allQuestions[globalIdx];
+  // Unngå dobbel-svar
+  const already = Array.from(optionsContainerEl.children).some(
+    b => b.classList.contains("correct") || b.classList.contains("incorrect")
+  );
+  if (already) return;
+
+  const chosenOriginalIndex = parseInt(btn.dataset.originalIndex, 10);
+  const isCorrect = chosenOriginalIndex === q.correctIndex;
+
+  Array.from(optionsContainerEl.children).forEach(b => {
+    const optIdx = parseInt(b.dataset.originalIndex, 10);
+    const statusSpan = b.querySelector(".option-status");
+    if (optIdx === q.correctIndex) {
+      b.classList.add("correct");
+      statusSpan.classList.add("good");
+      statusSpan.textContent = "Riktig svar";
+    }
+    if (b === btn && !isCorrect) {
+      b.classList.add("incorrect");
+      statusSpan.classList.add("bad");
+      statusSpan.textContent = "Ditt valg";
+    }
+  });
+
+  if (isCorrect) {
+        perfectRun++;
+        if (perfectRun >= perfectGoal) {
+            alert("🎉 Du klarte 10 rette! 🎉");
+            perfectRun = 0;
+        }
+
+    feedbackEl.innerHTML = "<span class='correct'>Riktig ✔</span>";
+    if (!practiceAnswered[globalIdx]) {
+      totalCorrectPractice++;
+      updateUnlockedTierIfNeeded();
+    }
+    if (deepDiveEl) {
+      const topicExtra = (typeof topicDeepDives !== "undefined" && topicDeepDives[q.topic]) ? topicDeepDives[q.topic] : "";
+      if (q.explanation || topicExtra) {
+        const base = q.explanation
+          ? `<p><strong>Kortsvar til dette konkrete spørsmålet:</strong> ${q.explanation}</p>`
+          : "";
+        deepDiveEl.innerHTML = `
+          <div class="deep-dive-header">
+            <div class="deep-dive-title">Mer utdypende forklaring</div>
+            <button type="button" class="deep-dive-close" aria-label="Lukk">&times;</button>
+          </div>
+          <div class="deep-dive-body">
+            ${base}
+            ${topicExtra}
+            <button type="button" class="secondary" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display==='none'?'block':'none'">
+              Vis eksempel fra praksis
+            </button>
+            <div style="display:none; margin-top:8px;">
+              <p><strong>Eksempel:</strong><br>
+              Tenk deg en konkret bruker i møte med NAV eller kommunen. Reglene i dette spørsmålet avgjør
+              hvilke rettigheter personen har, hvilke krav som stilles, og hvor mye skjønn forvaltningen kan bruke.
+              På eksamen kan du bruke et slikt enkelt eksempel for å vise at du forstår hvordan teori og lov virker i praksis.</p>
+            </div>
+          </div>
+        `;
+        deepDiveEl.style.display = "block";
+        const closeBtn = deepDiveEl.querySelector(".deep-dive-close");
+        if (closeBtn) {
+          closeBtn.onclick = () => {
+            deepDiveEl.style.display = "none";
+          };
+        }
+      } else {
+        perfectRun = 0;
+        deepDiveEl.style.display = "none";
+        deepDiveEl.innerHTML = "";
+      }
+    }
+  } else {
+        perfectRun = 0;
+    feedbackEl.innerHTML = "<span class='incorrect'>Feil ✖</span>";
+    if (deepDiveEl) {
+      deepDiveEl.style.display = "none";
+      deepDiveEl.innerHTML = "";
+    }
+  }
+
+  practiceAnswered[globalIdx] = true;
+  const globalAnswered = practiceAnswered.filter(Boolean).length;
+  answeredTextEl.textContent = `Besvart totalt: ${globalAnswered} / ${allQuestions.length}`;
+  scoreTextEl.textContent = `Riktige i øvingsmodus: ${totalCorrectPractice}`;
+  tierStatusTextEl.textContent = tierLabels[unlockedTier];
+}
+
+// ===== Eksamensmodus =====
+
+function startExam(numQuestions = 25) {
+  if (allQuestions.length === 0) return;
+  inExam = true;
+  examFinished = false;
+  examAnswers = {};
+  // trekk tilfeldig sett
+  examIndices = Array.from(allQuestions.keys());
+  shuffleArray(examIndices);
+  examIndices = examIndices.slice(0, Math.min(numQuestions, examIndices.length));
+  examPos = 0;
+  examSummaryEl.style.display = "none";
+
+  examBtn.textContent = "Lever eksamen og vis fasit";
+  examBtn.classList.add("danger");
+  examBannerTextEl.textContent = "Eksamensmodus: 25 tilfeldige spørsmål, ingen fasit før du leverer.";
+  renderExamQuestion();
+}
+
+function finishExam() {
+  if (!inExam || examFinished) return;
+  examFinished = true;
+  inExam = false;
+
+  let correct = 0;
+  const misses = [];
+
+  examIndices.forEach(globalIdx => {
+    const q = allQuestions[globalIdx];
+    const chosen = examAnswers[globalIdx];
+    if (chosen === undefined) return;
+    if (chosen === q.correctIndex) {
+      correct++;
+    } else {
+        perfectRun = 0;
+      misses.push({
+        question: q.question,
+        yourAnswer: q.options[chosen],
+        correctAnswer: q.options[q.correctIndex],
+        day: q.day,
+        topic: topicMap[q.topic] || q.topic
+      });
+    }
+  });
+
+  const totalQ = examIndices.length;
+  const percent = totalQ > 0 ? Math.round((correct / totalQ) * 100) : 0;
+
+  let html = "";
+  html += `<h3>Eksamensresultat: ${correct} / ${totalQ} riktige (${percent} %)</h3>`;
+  if (percent >= 80) {
+    html += "<p>Meget sterkt nivå. Du ligger godt an til eksamen.</p>";
+  } else if (percent >= 60) {
+    html += "<p>Greit nivå, men det er noen hull du bør tette før eksamen.</p>";
+  } else {
+        perfectRun = 0;
+    html += "<p>Det er en del hull. Bruk lista under til å se hva du skal lese mer på.</p>";
+  }
+
+  if (misses.length > 0) {
+    html += "<p>Spørsmål du bommet på:</p>";
+    misses.forEach((m, idx) => {
+      html += `<div class="exam-miss">
+        <strong>${idx + 1}. ${m.question}</strong><br>
+        Tema: ${m.day} – ${m.topic}<br>
+        Ditt svar: ${m.yourAnswer}<br>
+        Riktig svar: <span style="color:#22c55e;">${m.correctAnswer}</span>
+      </div>`;
+    });
+  }
+
+  examSummaryEl.innerHTML = html;
+  examSummaryEl.style.display = "block";
+
+  examBtn.textContent = "Start ny eksamen (25 spørsmål)";
+  examBtn.classList.remove("danger");
+  examBannerTextEl.textContent = "Eksamen levert. Du kan starte en ny prøve, eller gå tilbake til øving med fasit.";
+  // vis også et vanlig øvingsspørsmål
+  renderPracticeQuestion();
+}
+
+function renderExamQuestion() {
+  feedbackEl.textContent = "";
+  examSummaryEl.style.display = "none";
+
+  if (!inExam || examIndices.length === 0) {
+    questionTextEl.textContent = "Klikk 'Start eksamensmodus' for å begynne en prøve.";
+    optionsContainerEl.innerHTML = "";
+    topicTagEl.textContent = "";
+    dayTagEl.textContent = "";
+    tierTagEl.textContent = "";
+    counterTagEl.textContent = "";
+    progressInnerEl.style.width = "0%";
+    progressTextEl.textContent = "";
+    scoreTextEl.textContent = "";
+    answeredTextEl.textContent = "";
+    tierStatusTextEl.textContent = "";
+    return;
+  }
+
+  const globalIdx = examIndices[examPos];
+  const q = allQuestions[globalIdx];
+
+  topicTagEl.textContent = topicMap[q.topic] || q.topic || "";
+  dayTagEl.textContent = q.day || "";
+  tierTagEl.textContent = tierLabels[q.tier] || "";
+  counterTagEl.textContent = `Oppgave ${examPos + 1} / ${examIndices.length}`;
+  questionTextEl.textContent = q.question;
+
+  const answeredCount = Object.keys(examAnswers).length;
+  const percent = ((examPos + 1) / examIndices.length) * 100;
+  progressInnerEl.style.width = percent + "%";
+  progressTextEl.textContent = `Progresjon i eksamenssett: ${examPos + 1} av ${examIndices.length}`;
+  scoreTextEl.textContent = `Besvart hittil: ${answeredCount} / ${examIndices.length}`;
+  answeredTextEl.textContent = "";
+  tierStatusTextEl.textContent = "Ingen fasit underveis i eksamensmodus.";
+
+  optionsContainerEl.innerHTML = "";
+  const optionOrder = [0, 1, 2, 3];
+  shuffleArray(optionOrder);
+
+  const existingAnswer = examAnswers[globalIdx];
+
+  optionOrder.forEach((optIdx, i) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option-btn";
+    btn.dataset.originalIndex = optIdx;
+    btn.dataset.globalIndex = globalIdx;
+
+    const prefix = document.createElement("span");
+    prefix.className = "option-prefix";
+    prefix.textContent = String.fromCharCode(65 + i) + ".";
+
+    const txt = document.createElement("span");
+    txt.className = "txt";
+    txt.textContent = q.options[optIdx];
+
+    const status = document.createElement("span");
+    status.className = "option-status";
+    status.textContent = "";
+
+    if (existingAnswer === optIdx) {
+      btn.classList.add("exam-selected");
+      status.textContent = "Valgt";
+    }
+
+    btn.appendChild(prefix);
+    btn.appendChild(txt);
+    btn.appendChild(status);
+
+    btn.addEventListener("click", () => handleExamAnswer(btn, globalIdx));
+
+    optionsContainerEl.appendChild(btn);
+  });
+}
+
+function handleExamAnswer(btn, globalIdx) {
+  if (!inExam) return;
+  const chosenOriginalIndex = parseInt(btn.dataset.originalIndex, 10);
+
+  Array.from(optionsContainerEl.children).forEach(b => {
+    b.classList.remove("exam-selected");
+    const s = b.querySelector(".option-status");
+    if (s) s.textContent = "";
+  });
+
+  btn.classList.add("exam-selected");
+  const statusSpan = btn.querySelector(".option-status");
+  statusSpan.textContent = "Valgt";
+
+  examAnswers[globalIdx] = chosenOriginalIndex;
+  scoreTextEl.textContent = `Besvart hittil: ${Object.keys(examAnswers).length} / ${examIndices.length}`;
+}
+
+// ===== Navigasjon =====
+
+function goNext() {
+  if (inExam) {
+    if (examIndices.length === 0) return;
+    examPos = (examPos + 1) % examIndices.length;
+    renderExamQuestion();
+  } else {
+        perfectRun = 0;
+    if (practiceIndices.length === 0) return;
+    practicePos = (practicePos + 1) % practiceIndices.length;
+    renderPracticeQuestion();
+  }
+}
+
+function goPrev() {
+  if (inExam) {
+    if (examIndices.length === 0) return;
+    examPos = (examPos - 1 + examIndices.length) % examIndices.length;
+    renderExamQuestion();
+  } else {
+        perfectRun = 0;
+    if (practiceIndices.length === 0) return;
+    practicePos = (practicePos - 1 + practiceIndices.length) % practiceIndices.length;
+    renderPracticeQuestion();
+  }
+}
+
+function goRandom() {
+  if (inExam) {
+    if (examIndices.length === 0) return;
+    let newPos = examPos;
+    if (examIndices.length > 1) {
+      while (newPos === examPos) {
+        newPos = Math.floor(Math.random() * examIndices.length);
+      }
+    }
+    examPos = newPos;
+    renderExamQuestion();
+  } else {
+        perfectRun = 0;
+    if (practiceIndices.length === 0) return;
+    let newPos = practicePos;
+    if (practiceIndices.length > 1) {
+      while (newPos === practicePos) {
+        newPos = Math.floor(Math.random() * practiceIndices.length);
+      }
+    }
+    practicePos = newPos;
+    renderPracticeQuestion();
+  }
+}
+
+prevBtn.addEventListener("click", goPrev);
+nextBtn.addEventListener("click", goNext);
+randomBtn.addEventListener("click", goRandom);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") goNext();
+  else if (e.key === "ArrowLeft") goPrev();
+});
+
+examBtn.addEventListener("click", () => {
+  if (!inExam && !examFinished) {
+    startExam(25);
+  } else if (inExam && !examFinished) {
+    finishExam();
+  } else if (!inExam && examFinished) {
+    // start ny eksamen
+    examFinished = false;
+    startExam(25);
+  }
+});
+
+// Init
+if (allQuestions.length === 0) {
+  questionTextEl.textContent = "Ingen spørsmål lastet inn. Noe har gått galt.";
+} else {
+        perfectRun = 0;
+  initPracticeState();
+  renderPracticeQuestion();
+}
+</script>
+
+<script>
+(function(){
+  let streak = Number(localStorage.getItem("hidden_streak") || 0);
+
+  function showStreakMessage(msg){
+    const el = document.querySelector(".feedback") || document.querySelector("#feedback");
+    if(!el) return;
+    const note = document.createElement("div");
+    note.style.fontSize = "0.85rem";
+    note.style.marginTop = "6px";
+    note.style.opacity = "0.8";
+    note.textContent = msg;
+    el.appendChild(note);
+    setTimeout(()=>note.remove(), 1800);
+  }
+
+  document.addEventListener("quiz:correct", () => {
+    streak++;
+    localStorage.setItem("hidden_streak", streak);
+    if(streak === 5) showStreakMessage("God flyt");
+    if(streak === 10) showStreakMessage("10 riktige på rad");
+    if(streak === 20) showStreakMessage("Sterk kontroll");
+  });
+
+  document.addEventListener("quiz:wrong", () => {
+    streak = 0;
+    localStorage.setItem("hidden_streak", 0);
+  });
+})();
+</script>
+
+
+<!-- ================= SANN-MODUS ================= -->
+<button onclick="openSannMode()" style="margin-top:10px;">SANN-modus</button>
+
+<div id="sannMode" style="display:none; padding:20px;">
+  <h2>SANN-modus – kort skriftlig svar</h2>
+  <p><strong>Skriv 5–7 linjer. Følg sensor-malen.</strong></p>
+
+  <p id="sannQuestion"></p>
+
+  <textarea id="sannAnswer" rows="6" style="width:100%;"
+    placeholder="Definer → koble til teori/lov → anvend → konkluder"></textarea>
+
+  <button onclick="showSensorGuide()">Vis sensor-mal</button>
+
+  <div id="sensorGuide" style="display:none; margin-top:15px;">
+    <strong>Sensor-mal:</strong>
+    <ol>
+      <li>Definisjon</li>
+      <li>Lov/teori</li>
+      <li>Relevans</li>
+      <li>Anvendelse</li>
+      <li>Skjønn/vurdering</li>
+      <li>Konklusjon</li>
+    </ol>
+  </div>
+
+  <button onclick="closeSannMode()">Tilbake</button>
+</div>
+
+<script>
+const sannQuestions = [
+  "Forklar kort hva rettssikkerhet innebærer i sosialt arbeid, og vis hvordan dette kan komme til uttrykk i en NAV-sak.",
+  "Drøft kort forholdet mellom skjønn og rettigheter i forvaltningen, med utgangspunkt i sosialt arbeid.",
+  "Forklar hvorfor kommunen ikke kan avslå tjenester kun med henvisning til økonomi.",
+  "Forklar kort hva brukermedvirkning betyr, og vurder betydningen av dette i møte mellom sosialarbeider og bruker.",
+  "Drøft kort sosialarbeiderens rolle som bakkebyråkrat, og hvilke dilemmaer dette kan skape."
+];
+
+function openSannMode() {
+  const q = sannQuestions[Math.floor(Math.random() * sannQuestions.length)];
+  document.getElementById("sannQuestion").innerText = q;
+  document.getElementById("sannAnswer").value = "";
+  document.getElementById("sensorGuide").style.display = "none";
+  document.getElementById("sannMode").style.display = "block";
+}
+
+function showSensorGuide() {
+  document.getElementById("sensorGuide").style.display = "block";
+}
+
+function closeSannMode() {
+  document.getElementById("sannMode").style.display = "none";
+}
+</script>
+<!-- =============== SLUTT SANN-MODUS =============== -->
+
+</body>
+</html>
